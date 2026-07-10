@@ -115,8 +115,15 @@ select.inp{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.
 
 .dispatch-row{display:grid;grid-template-columns:110px 1fr 38px;gap:8px;margin-bottom:8px;align-items:center;}
 input[type="time"]::-webkit-calendar-picker-indicator {
-  filter: invert(0.8) sepia(1) saturate(5) hue-rotate(190deg); /* Make native picker icon matching dark theme */
+  filter: invert(0.8) sepia(1) saturate(5) hue-rotate(190deg);
   cursor: pointer;
+}
+/* 시간 입력칸 흐릿한 시계 배경 (값 입력 안내) */
+input[type="time"].time-hint{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%235a6270' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpolyline points='12 7 12 12 15 14'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:10px center;
+  background-size:19px 19px;
 }
 
 .qty-total-bar{background:linear-gradient(135deg,#0a2620,#0d2e26);border:1.5px solid #155244;border-radius:13px;padding:14px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
@@ -220,10 +227,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .wx-int2{color:var(--amber2);font-weight:800;}
 .wx-int3{color:var(--red2);font-weight:800;}
 .wx-cell-danger{background:rgba(220,38,38,0.10);}
-.wx-prob{font-weight:700;color:var(--blue3);}
-.wx-wind{font-size:11px;color:var(--sub);line-height:1.35;}
-.wx-wind .arr{display:inline-block;font-size:13px;color:var(--text);}
-.wx-hum{color:var(--sub);}
 .wx-note{font-size:11px;color:var(--dim);line-height:1.6;margin-bottom:14px;}
 
 .sheet-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:120;align-items:flex-end;justify-content:center;}
@@ -239,7 +242,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .set-tab{flex:1;padding:11px 0;border:1.5px solid var(--border);border-radius:11px;background:var(--card);color:var(--sub);font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;transition:all 0.15s;}
 .set-tab.active{background:var(--teal);border-color:var(--teal);color:#04211c;}
 
-/* 설정 내 서브탭 전용 */
 .sheet-tabs{display:flex;gap:6px;margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:10px;}
 .sheet-tab{flex:1;padding:10px 0;border:none;background:var(--card2);color:var(--sub);font-size:12.5px;font-weight:700;border-radius:8px;cursor:pointer;font-family:inherit;transition:all 0.15s;}
 .sheet-tab.active{background:var(--blue);color:#fff;}
@@ -293,6 +295,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     <button class="tab" id="tab-weather" onclick="switchTab('weather')">⛈️ 날씨</button>
     <button class="tab" id="tab-volume" onclick="switchTab('volume')">📦 물량</button>
     <button class="tab" id="tab-dispatch" onclick="switchTab('dispatch')">🚛 출차</button>
+    <button class="tab" id="tab-inbound" onclick="switchTab('inbound')">🚚 입고</button>
   </div>
 
   <div class="wx-strip" id="wx-strip" onclick="switchTab('weather')"></div>
@@ -300,7 +303,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   <div class="content" id="content"></div>
 </div>
 
-<!-- 설정 모달 시트 (상세 영구 템플릿 저장 기능 추가) -->
 <div class="sheet-overlay" id="settings-sheet" onclick="if(event.target===this)closeSettings()">
   <div class="sheet" style="max-height: 85vh; overflow-y: auto;">
     <div class="sheet-title">⚙️ 설정 및 문구 양식</div>
@@ -311,7 +313,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
       <button class="sheet-tab" id="sheet-tab-tpl" onclick="switchSettingsTab('tpl')">📝 기본 문구 편집</button>
     </div>
 
-    <!-- 일반 설정 패널 -->
     <div id="set-panel-gen">
       <label class="field-label">Gemini API 키</label>
       <input class="inp" id="set-apikey" type="password" placeholder="AIza..." autocomplete="off">
@@ -326,7 +327,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
       <div class="sheet-hint">인식 오류가 발생하면 모델을 변경해보세요.</div>
     </div>
 
-    <!-- 기본 공유 문구 양식 관리 패널 -->
     <div id="set-panel-tpl" style="display:none;">
       <label class="field-label">수정할 카톡 양식 선택</label>
       <select class="inp" id="set-tpl-selector" onchange="onTemplateSelectorChange()">
@@ -335,8 +335,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
         <option value="wx_heavy">🚨 기상 전파 (강한 비)</option>
         <option value="wx_rain">🌦️ 기상 안내 (일반 비)</option>
         <option value="wx_clear">☀️ 기상 안내 (비 없음)</option>
+        <option value="tip_clear">☀️ 기사멘트 (비 없음)</option>
+        <option value="tip_light">🌦️ 기사멘트 (약한 비)</option>
+        <option value="tip_normal">🌧️ 기사멘트 (보통 비)</option>
+        <option value="tip_heavy">⛈️ 기사멘트 (강한 비·폭우)</option>
         <option value="volume">📦 물량 양식</option>
         <option value="dispatch">🚛 출차 순서 양식</option>
+        <option value="inbound">🚚 간선 도착 · 입고 양식</option>
       </select>
       <div style="height:10px"></div>
       <label class="field-label">양식 문구 내용</label>
@@ -354,7 +359,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 <div class="sheet-overlay" id="backup-sheet" onclick="if(event.target===this)closeBackup()">
   <div class="sheet">
     <div class="sheet-title">💾 명단 백업 · 복원</div>
-    <div class="sheet-sub">출근명단과 새벽반의 요일별 기본 명단을 파일 하나로 저장하고, 새 기기에서 불러올 수 있어요. (물량·API 키는 포함되지 않습니다)</div>
+    <div class="sheet-sub">출근명단, 새벽반, 출차관리의 요일별 기본 명단을 파일 하나로 저장하고, 새 기기에서 불러올 수 있어요. (물량·API 키는 포함되지 않습니다)</div>
     <label class="field-label">내보내기</label>
     <div class="sheet-btns" style="margin-top:0">
       <button class="mini-btn" style="border-color:#155244;color:var(--teal3)" onclick="exportBackupFile()">📤 파일로 저장</button>
@@ -389,23 +394,27 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 const DAYS=['일','월','화','수','목','금','토'];
 const DOW_FULL=['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
 let tab='roster';
-const TAB_TITLES={roster:'출근명단 정리',dawn:'새벽반 명단',weather:'실시간 기상 감시',volume:'물량 정리',dispatch:'출차 및 입차 관리'};
+const TAB_TITLES={roster:'출근명단 정리',dawn:'새벽반 명단',weather:'실시간 기상 감시',volume:'물량 정리',dispatch:'출차 및 입차 관리',inbound:'간선 도착 · 입고'};
 
-/* 기사님이 직접 수정한 카톡 미리보기 임시 보존용 버퍼 변수 */
 let customRosterText = null;
 let customWeatherText = null;
 let customVolumeText = null;
 let customDispatchText = null;
+let customInboundText = null;
 
-// 공유 기본 문구 템플릿 정의 및 기사님 요청사항 반영 (우비·방수포 챙겨 문구 삭제 완료)
 const DEFAULT_TEMPLATES = {
   roster: `{emoji} {date} {title}\n━━━━━━━━━\n{zones}\n━━━━━━━━━\n👥 총 {total}명`,
   dawn: `{emoji} {date} {title}\n━━━━━━━━━\n{zones}\n━━━━━━━━━\n👥 총 {total}명`,
-  wx_heavy: `🚨 [기상 상황 전파]\n⏱️ {time} 기준 · 강남구 기준 실시간 예보\n━━━━━━━━━\n{status_msg}\n(시간당 약 {rain_mm}mm{prob})\n· 예상 지속 시간: 약 {duration}\n━━━━━━━━━\n⚠️ 비 들어오기 전에 적재함 문단속 한 번씩 부탁드립니다.\n⚠️ 빗길에서는 안전거리를 평소의 2배로 넉넉히 확보해주세요.\n⚠️ 시야 안 좋은 골목에서는 충분히 감속 운행 바랍니다.\n오늘도 안전운행이 최우선입니다 🙏`,
-  wx_rain: `🌦️ [기상 안내]\n⏱️ {time} 기준 · 강남구 기준 실시간 예보\n━━━━━━━━━\n{status_msg}\n(시간당 약 {rain_mm}mm{prob})\n━━━━━━━━━\n젖은 노면 미끄럼에 주의하시고, 안전운전하세요! 🚗`,
-  wx_clear: `☀️ [기상 안내]\n⏱️ {time} 기준 · 강남구 기준 실시간 예보\n━━━━━━━━━\n앞으로 약 {span_hours}시간 동안 배송 구역에 비 소식은 없습니다.\n━━━━━━━━━\n오늘도 기상 상황이 양호합니다.\n수고 많으십니다, 기분 좋은 하루 보내시고 안전운행하세요! 👍`,
+  wx_heavy: `🚨 [기상 상황 전파]\n⏱️ {time} 기준 · 강남구 기준 실시간 예보\n━━━━━━━━━\n{status_msg}\n(시간당 약 {rain_mm}mm{prob})\n· 예상 지속 시간: 약 {duration}\n━━━━━━━━━\n{tip}\n오늘도 안전운행이 최우선입니다 🙏`,
+  wx_rain: `🌦️ [기상 안내]\n⏱️ {time} 기준 · 강남구 기준 실시간 예보\n━━━━━━━━━\n{status_msg}\n(시간당 약 {rain_mm}mm{prob})\n━━━━━━━━━\n{tip}`,
+  wx_clear: `☀️ [기상 안내]\n⏱️ {time} 기준 · 강남구 기준 실시간 예보\n━━━━━━━━━\n앞으로 약 {span_hours}시간 동안 배송 구역에 비 소식은 없습니다.\n━━━━━━━━━\n{tip}`,
+  tip_clear: `오늘 기상 상황 양호합니다. 수고 많으시고 안전운행하세요! 👍|비 걱정 없는 날입니다. 컨디션 관리 잘하시고 무리하지 마세요!|맑은 날씨 이어집니다. 수분 섭취 챙기시고 오늘도 화이팅입니다!`,
+  tip_light: `부슬비가 이어집니다. 우비는 애매해도 송장 젖을 수 있으니 가림막 미리 챙기세요.|약한 비로 노면이 계속 젖어 있어요. 지하주차장 진입 시 미끄러짐 조심하세요.`,
+  tip_normal: `줄기차게 내립니다. 우비 챙기시고, 탑차 문은 뒤쪽부터 단단히 단속하세요.|노면 물고임이 심해집니다. 물웅덩이 보행자 물튀김 주의하고 안전거리 넉넉히 두세요.`,
+  tip_heavy: `장대비가 쏟아져 와이퍼로도 시야 확보가 어렵습니다. 무리한 추월 절대 금물이에요.|폭우로 신발·장갑이 젖어 페달·핸들이 미끄러울 수 있어요. 수시로 닦고 완배보다 안전 먼저입니다.`,
   volume: `📦 {date} {title}\n━━━━━━━━━\n{rows}━━━━━━━━━\n📊 합계 {total}건`,
-  dispatch: `(공지) {date} ({day}) 출차순서\n━━━━━━━━━\n{orders}\n━━━━━━━━━\n{inbounds}`
+  dispatch: `(공지) {date} ({day}) 출차순서\n━━━━━━━━━\n{orders}\n━━━━━━━━━\n{inbounds}`,
+  inbound: `🚚 [{set} 입고 안내] {date}\n━━━━━━━━━\n{rows}━━━━━━━━━\n도착 시간 참고 및 확인 부탁드립니다`
 };
 
 let editingTemplates = {};
@@ -414,7 +423,6 @@ let currentTemplateKey = 'roster';
 function getTemplate(key) {
   let tpl = localStorage.getItem('disp-tpl-' + key);
   if (!tpl) return DEFAULT_TEMPLATES[key];
-  // 신규 수동 템플릿 강제 마이그레이션 지원
   if (key === 'dispatch' && tpl.includes('[공지] 오늘')) {
     return DEFAULT_TEMPLATES.dispatch;
   }
@@ -450,7 +458,6 @@ function deepZones(zs){return zs.map(z=>({emoji:z.emoji||'📍',name:z.name,peop
 
 function load(k,def){try{const v=JSON.parse(localStorage.getItem(k));return (v===null||v===undefined)?def:v;}catch(e){return def;}}
 
-/* rosters.main = 주간 출근명단, rosters.dawn = 새벽반 */
 const rosters={
   main:{lsKey:'disp-roster-tpl',defTitle:'LK 출근 명단',emoji:'🚚',label:'출근명단',theme:''},
   dawn:{lsKey:'disp-dawn-tpl',defTitle:'새벽반 출근 명단',emoji:'🌅',label:'새벽반',theme:'dawn-theme'}
@@ -472,7 +479,6 @@ function initRoster(key){
 initRoster('main');
 initRoster('dawn');
 
-/* 구버전 데이터 마이그레이션 */
 (function migrateDawn(){
   const legacy=load('disp-dawn',null);
   if(Array.isArray(legacy)&&legacy.length&&!rosters.dawn.work.zones.length){
@@ -529,43 +535,59 @@ function switchVolSet(s){
 }
 function saveVolume(){localStorage.setItem('disp-volume',JSON.stringify(volStore));}
 
-/* 출차/입차 기획 관리 데이터 저장소 */
-let dispatchStore = load('disp-dispatch', {
-  date: todayISO(),
-  groups: [
-    { people: ['전진환', '권현정'] },
-    { people: ['이성학', '이승민'] },
-    { people: ['박서준', '김진호'] },
-    { people: ['이영진'] },
-    { people: ['이선하', '박은아'] }
-  ],
-  inbounds: [
-    { time: '04:30', people: '이승민' },
-    { time: '05:00', people: '박서준, 김진호' },
-    { time: '05:15', people: '이영진' },
-    { time: '05:30', people: '이선하, 박은아' }
-  ]
-});
-
-function saveDispatch() {
-  localStorage.setItem('disp-dispatch', JSON.stringify(dispatchStore));
+/* ═══════════ 출차 및 입차 관리 데이터 요일 저장소 ═══════════ */
+function blankDispatchTpl() {
+  return { groups: [], inbounds: [], saved: false };
+}
+function deepDispatchData(src) {
+  return {
+    groups: (src.groups || []).map(g => ({ people: [...g.people] })),
+    inbounds: (src.inbounds || []).map(ib => ({ time: ib.time, people: ib.people }))
+  };
 }
 
-// 명단 기반 칩 조회를 위해 오늘 활성화된 전체 기사 목록 추출 ( Roster + Dawn 합산 )
+let dispatchTplStore = load('disp-dispatch-tpl', null);
+if (!dispatchTplStore) {
+  dispatchTplStore = [0,1,2,3,4,5,6].map(() => blankDispatchTpl());
+  localStorage.setItem('disp-dispatch-tpl', JSON.stringify(dispatchTplStore));
+}
+
+let dispatchWorkDow = dowOf(todayISO());
+let dispatchStore = {
+  date: todayISO(),
+  groups: deepDispatchData(dispatchTplStore[dispatchWorkDow]).groups,
+  inbounds: deepDispatchData(dispatchTplStore[dispatchWorkDow]).inbounds
+};
+
+function saveDispatch() {
+  // 현재 가동 데이터 임시 휘발성 임시 보관용 처리 연동 (백업 연동 목적 호환성 유지)
+  localStorage.setItem('disp-dispatch', JSON.stringify(dispatchStore));
+}
+function saveDispatchTpl() {
+  localStorage.setItem('disp-dispatch-tpl', JSON.stringify(dispatchTplStore));
+}
+
+function selectDispatchDow(d) {
+  customDispatchText = null;
+  dispatchWorkDow = d;
+  const targetTpl = dispatchTplStore[d];
+  dispatchStore.groups = deepDispatchData(targetTpl).groups;
+  dispatchStore.inbounds = deepDispatchData(targetTpl).inbounds;
+  dispatchStore.date = nearestDateForDow(d);
+  render();
+}
+
 function getTodayActiveDrivers() {
   const drivers = new Set();
-  // 주간 출근명단
   rosters.main.work.zones.forEach(z => {
     if(z.people) z.people.forEach(p => drivers.add(p));
   });
-  // 새벽반 명단
   rosters.dawn.work.zones.forEach(z => {
     if(z.people) z.people.forEach(p => drivers.add(p));
   });
   return Array.from(drivers);
 }
 
-// 칩 입력창 자동 완성을 유도하는 현재 포커스 포인터 트래커
 let activeChipInputRef = null;
 
 function autoResizePreviews() {
@@ -580,8 +602,9 @@ function switchTab(t){
   customWeatherText = null;
   customVolumeText = null;
   customDispatchText = null;
+  customInboundText = null;
   tab=t;
-  ['roster','dawn','weather','volume','dispatch'].forEach(x=>document.getElementById('tab-'+x).classList.toggle('active',x===t));
+  ['roster','dawn','weather','volume','dispatch','inbound'].forEach(x=>document.getElementById('tab-'+x).classList.toggle('active',x===t));
   document.getElementById('hTitle').textContent=TAB_TITLES[t];
   render();
 }
@@ -592,6 +615,7 @@ function render(){
   if(tab==='roster'||tab==='dawn') c.innerHTML=renderRoster();
   else if(tab==='volume') c.innerHTML=renderVolume();
   else if(tab==='weather') c.innerHTML=renderWeather();
+  else if(tab==='inbound') c.innerHTML=renderInbound();
   else c.innerHTML=renderDispatch();
   
   setTimeout(autoResizePreviews, 10);
@@ -715,7 +739,7 @@ function reloadTpl(){
   render();showToast('기본 명단으로 되돌렸어요');
 }
 
-/* ═══════════ 실시간 기상 감시 (강남구 고정) ═══════════ */
+/* ═══════════ 실시간 기상 감시 ═══════════ */
 let wx={lat:37.4882,lon:127.0518,timeline:null,updated:null,err:null,model:'',alerted:0,loading:false};
 
 function initWeather(){
@@ -727,7 +751,7 @@ async function fetchWeather(){
   if(wx.loading){wx.queue=true;return;}
   wx.loading=true;
   const la=Number(wx.lat).toFixed(4), lo=Number(wx.lon).toFixed(4);
-  const url=`https://api.open-meteo.com/v1/forecast?latitude=${la}&longitude=${lo}&hourly=precipitation_probability,precipitation,temperature_2m,weather_code,is_day&forecast_days=2&timeformat=unixtime&timezone=Asia%2FSeoul`;
+  const url=`https://api.open-meteo.com/v1/forecast?latitude=${la}&longitude=${lo}&hourly=precipitation_probability,precipitation,temperature_2m,apparent_temperature,weather_code,is_day&forecast_days=2&timeformat=unixtime&timezone=Asia%2FSeoul`;
   
   let d=null, lastErr='';
   try{
@@ -762,6 +786,7 @@ async function fetchWeather(){
         time:t*1000,step:60,
         mm:g(d.hourly,'precipitation',i,0),
         temp:g(d.hourly,'temperature_2m',i,null),
+        feels:g(d.hourly,'apparent_temperature',i,null),
         code:g(d.hourly,'weather_code',i,null),
         isDay:g(d.hourly,'is_day',i,1),
         prob:g(d.hourly,'precipitation_probability',i,null)
@@ -791,6 +816,7 @@ function wxLevel(mm,step){
 
 function checkWxAlert(){
   const strip=document.getElementById('wx-strip');
+  if(!strip) return;
   if(!wx.timeline){strip.classList.remove('show');return;}
   const now=Date.now();
   const strong=wx.timeline.find(e=>wxLevel(e.mm,e.step).lv>=2&&(e.time-now)<60*60000);
@@ -847,28 +873,37 @@ function wxTableHtml(){
     const mins=i*step, h=Math.floor(mins/60), r=mins%60;
     return (h?h+'시간':'')+(r?r+'분':'');
   };
+  // ── 날씨누리 형태 5행 테이블: 시각 / 날씨 / 기온 / 체감온도 / 강수량 / 강수강도 ──
   const rowTime=`<tr><th class="lbl">시각</th>${cells((e,i)=>`<th class="${i===0?'now':''}"><div class="wx-time">${lblOf(i)}<small>${fmtHM(new Date(e.time))}</small></div></th>`)}</tr>`;
 
-  const rowIco=`<tr><th class="lbl">날씨</th>${cells((e,i)=>`<td class="wx-ico${i===0?' now':''}${dcls(e)}">${wxIcon(e.code,e.isDay,e.mm)}</td>`)}</tr>`;
+  // 날씨 아이콘: 강수량이 있으면 우산 계열, 없으면 하늘상태(맑음/구름) 이모지
+  const nuriIcon=e=>{
+    const perH=e.mm*(60/e.step);
+    if(perH>=0.1) return '☔';   // 비 예보 시 우산 (낮/밤 동일)
+    return wxIcon(e.code,e.isDay,e.mm);        // 맑음/구름 등은 기존 아이콘
+  };
+  const rowIco=`<tr><th class="lbl">날씨</th>${cells((e,i)=>`<td class="wx-ico${i===0?' now':''}${dcls(e)}">${nuriIcon(e)}</td>`)}</tr>`;
 
-  let rowTemp;
-  const temps=tl.map(e=>e.temp);
-  if(temps.every(t=>t!=null)){
-    const H=62,PT=17,PB=8;
-    const mn=Math.min.apply(null,temps),mx=Math.max.apply(null,temps),rg=Math.max(mx-mn,1);
-    const yOf=t=>PT+(mx-t)/rg*(H-PT-PB);
-    const pts=temps.map((t,i)=>`${i*CW+half},${yOf(t).toFixed(1)}`).join(' ');
-    const dots=temps.map((t,i)=>`<circle cx="${i*CW+half}" cy="${yOf(t).toFixed(1)}" r="3" fill="#60a5fa"/><text x="${i*CW+half}" y="${(yOf(t)-7).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="700" fill="#eceff3">${Math.round(t)}°</text>`).join('');
-    rowTemp=`<tr><th class="lbl">기온</th><td colspan="${N}" style="padding:0"><svg width="${N*CW}" height="${H}" style="display:block"><polyline points="${pts}" fill="none" stroke="#3b82f6" stroke-width="2"/>${dots}</svg></td></tr>`;
-  }else{
-    rowTemp=`<tr><th class="lbl">기온</th>${cells(e=>`<td>${e.temp!=null?Math.round(e.temp)+'°':'-'}</td>`)}</tr>`;
-  }
+  // 기온 (숫자 표기, 날씨누리처럼 °C)
+  const rowTemp=`<tr><th class="lbl">기온</th>${cells(e=>`<td class="wx-mm" style="color:var(--blue3)">${e.temp!=null?Math.round(e.temp)+'°':'-'}</td>`)}</tr>`;
 
-  const rowMm=`<tr><th class="lbl">강수량<br>(mm)</th>${cells(e=>`<td class="wx-mm${dcls(e)}">${e.mm>=0.05?(e.mm<10?e.mm.toFixed(1):Math.round(e.mm)):'-'}</td>`)}</tr>`;
-  const rowInt=`<tr><th class="lbl">강수강도</th>${cells(e=>{const L=lvOf(e);return `<td class="wx-int${L.lv}${dcls(e)}">${L.lv?L.label:'-'}</td>`;})}</tr>`;
-  const rowProb=`<tr><th class="lbl">강수확률</th>${cells(e=>`<td class="wx-prob">${e.prob!=null?Math.round(e.prob)+'%':'-'}</td>`)}</tr>`;
+  // 체감온도
+  const rowFeel=`<tr><th class="lbl">체감온도</th>${cells(e=>`<td style="color:var(--amber2);font-weight:700">${e.feels!=null?Math.round(e.feels)+'°':'-'}</td>`)}</tr>`;
 
-  return `<table class="wx-table">${rowTime}${rowIco}${rowTemp}${rowMm}${rowInt}${rowProb}</table>`;
+  // 강수량 (mm, 날씨누리처럼 정수)
+  const rowMm=`<tr><th class="lbl">강수량<br>(mm)</th>${cells(e=>`<td class="wx-mm${dcls(e)}">${e.mm>=0.05?(e.mm<1?e.mm.toFixed(1):Math.round(e.mm)):'-'}</td>`)}</tr>`;
+
+  // 강수강도 (날씨누리 표기: 약한비/보통비/강한비/매우강한비)
+  const nuriInt=L=>{
+    if(L.lv===0) return '-';
+    if(L.perH<1)  return '약한비';
+    if(L.perH<4)  return '보통비';
+    if(L.perH<10) return '강한비';
+    return '매우강한비';
+  };
+  const rowInt=`<tr><th class="lbl">강수강도</th>${cells(e=>{const L=lvOf(e);return `<td class="wx-int${L.lv}${dcls(e)}">${nuriInt(L)}</td>`;})}</tr>`;
+
+  return `<table class="wx-table">${rowTime}${rowIco}${rowTemp}${rowFeel}${rowMm}${rowInt}</table>`;
 }
 
 function updateWeatherDom(){
@@ -891,8 +926,6 @@ function updateWeatherDom(){
 function renderWeather(){
   const windySrc=`https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&zoom=9&overlay=radar&product=radar&level=surface&lat=${wx.lat.toFixed(4)}&lon=${wx.lon.toFixed(4)}`;
   const shareTxt = customWeatherText !== null ? customWeatherText : wxShareText();
-  const step=wx.timeline&&wx.timeline[0]?wx.timeline[0].step:60;
-  const stepLbl='1시간';
   const spanH=wx.timeline?Math.round(wx.timeline.reduce((s,e)=>s+e.step,0)/60):6;
   return `
     <div class="wx-meta">
@@ -902,11 +935,10 @@ function renderWeather(){
       </div>
     </div>
     <div class="wx-frame-wrap"><iframe src="${windySrc}" allowfullscreen loading="lazy"></iframe></div>
-    <div class="section-head"><div class="section-title">⏱ ${stepLbl} 단위 상세 예보 (약 ${spanH}시간)</div></div>
+    <div class="section-head"><div class="section-title">⏱ 1시간 단위 상세 예보 (약 ${spanH}시간)</div></div>
     <div class="wx-table-wrap" id="wx-table-wrap">${wxTableHtml()}</div>
     <div class="wx-note">위 레이더는 Windy 실시간 비구름 화면이고, 타임라인은 기상청(KMA) 등 수치예보 모델 데이터로 계산됩니다. 앱이 켜져 있는 동안 10분마다 자동으로 재감지하며, 60분 내 강한 비가 감지되면 상단에 경보띠가 뜹니다.</div>
     
-    <!-- 카톡 미리보기 -->
     <div class="preview-wrap">
       <div class="preview-label">카톡 미리보기 — 실제 예보로 자동 작성 (직접 편집 가능)</div>
       <textarea class="kakao-bubble${shareTxt?'':' empty'}" id="wx-bubble" oninput="customWeatherText=this.value; autoResizePreviews();" placeholder="예보가 로드되면 공유 문구가 자동으로 만들어집니다. 직접 내용을 고치고 공유하셔도 적용됩니다.">${esc(shareTxt)}</textarea>
@@ -916,6 +948,22 @@ function renderWeather(){
       </div>
     </div>
     <div style="height:20px"></div>`;
+}
+
+// 멘트 풀에서 랜덤 하나 뽑기 (| 로 구분, 설정에서 편집 가능)
+function tipPick(key){
+  const pool = getTemplate(key).split('|').map(x=>x.trim()).filter(Boolean);
+  if(!pool.length) return '';
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
+// 강수강도별 기사용 안내 멘트
+function rainTip(perH){
+  let key;
+  if(perH < 1)      key = 'tip_light';   // 약한 비 (0.2~1mm)
+  else if(perH < 3) key = 'tip_normal';  // 보통 비 (1~3mm)
+  else              key = 'tip_heavy';   // 강한 비/폭우 (3mm 이상)
+  return tipPick(key);
 }
 
 function wxShareText(){
@@ -933,7 +981,8 @@ function wxShareText(){
     return `${r}분`;
   };
 
-  const idx=wx.timeline.findIndex(e=>wxLevel(e.mm,e.step).lv>=2);
+  // 강한 비/폭우: 시간당 3mm 이상
+  const idx=wx.timeline.findIndex(e=>wxLevel(e.mm,e.step).perH>=3);
   if(idx>=0){
     const strong=wx.timeline[idx], st=new Date(strong.time);
     const mins=Math.max(0,Math.round((strong.time-now.getTime())/60000));
@@ -944,13 +993,14 @@ function wxShareText(){
     }
     
     const statusMsg = mins<=5
-      ? `현재 배송 구역에 ${L.label}가 지나가고 있습니다.`
-      : `약 ${formatTimeDiff(mins)} 뒤(${fmtHM(st)}경)부터 배송 구역에 ${L.label} 소식이 있습니다.`;
+      ? `현재 배송 구역에 강한 비가 지나가고 있습니다.`
+      : `약 ${formatTimeDiff(mins)} 뒤(${fmtHM(st)}경)부터 배송 구역에 강한 비 소식이 있습니다.`;
     
     const tpl = getTemplate('wx_heavy');
     return formatTemplate(tpl, {
       time: fmtHM(now),
       status_msg: statusMsg,
+      tip: rainTip(L.perH),
       rain_mm: mmTxt(L),
       prob: strong.prob!=null?` · 강수확률 ${Math.round(strong.prob)}%`:'',
       duration: formatTimeDiff(dur)
@@ -971,6 +1021,7 @@ function wxShareText(){
     return formatTemplate(tpl, {
       time: fmtHM(now),
       status_msg: statusMsg,
+      tip: rainTip(L.perH),
       rain_mm: L.perH.toFixed(1),
       prob: r.prob!=null?` · 확률 ${Math.round(r.prob)}%`:''
     });
@@ -979,7 +1030,8 @@ function wxShareText(){
   const tpl = getTemplate('wx_clear');
   return formatTemplate(tpl, {
     time: fmtHM(now),
-    span_hours: spanH
+    span_hours: spanH,
+    tip: tipPick('tip_clear')
   });
 }
 
@@ -1053,7 +1105,6 @@ function renderVolume(){
       <span class="qty-total-val" id="volTotal">${total.toLocaleString()}<small>건</small></span>
     </div>
     
-    <!-- 카톡 미리보기 -->
     <div class="preview-wrap">
       <div class="preview-label">카톡 미리보기 (직접 편집 가능)</div>
       <textarea class="kakao-bubble${previewText?'':' empty'}" oninput="customVolumeText=this.value; autoResizePreviews();" placeholder="동과 건수를 입력하면 여기에 미리보기가 나옵니다. 직접 템플릿 문구를 수정할 수 있습니다.">${esc(previewText)}</textarea>
@@ -1127,7 +1178,7 @@ function liveTotal(){
   if(el) el.innerHTML=`${t.toLocaleString()}<small>건</small>`;
 }
 
-/* 출차 및 입차 관리 탭 렌더러 */
+/* ═══════════ 출차 및 입차 관리 (개편 완료) ═══════════ */
 const DISPATCH_RANK_EMOJIS = ['🥇', '🥈', '🥉', '🚚', '🚛', '📦', '📍'];
 
 function formatTimeForInput(t) {
@@ -1149,10 +1200,25 @@ function formatTimeForPreview(t) {
 }
 
 function renderDispatch(){
+  const dowBtns=DAYS.map((d,i)=>{
+    const cls=['dow-btn'];
+    if(i===dispatchWorkDow)cls.push('active');
+    if(i===0)cls.push('sun');if(i===6)cls.push('sat');
+    if(dispatchTplStore[i].saved && (dispatchTplStore[i].groups.length || dispatchTplStore[i].inbounds.length))cls.push('has-data');
+    return `<button class="${cls.join(' ')}" onclick="selectDispatchDow(${i})">${d}<span class="dow-dot"></span></button>`;
+  }).join('');
+
+  const tplSaved = dispatchTplStore[dispatchWorkDow].saved;
+  const banner=`<div class="tpl-banner">
+    <span class="tpl-banner-icon">${tplSaved?'📌':'🚛'}</span>
+    <span class="tpl-banner-txt">${tplSaved
+      ? `<b>${DOW_FULL[dispatchWorkDow]}</b> 출차 기본 정보를 불러왔어요.`
+      : `<b>${DOW_FULL[dispatchWorkDow]}</b> 출차 정보는 저장된 기본이 없어요. 작성 후 하단에 기본 저장하세요.`}</span>
+  </div>`;
+
   const activeDrivers = getTodayActiveDrivers();
   let driverHelperHtml = '';
   
-  // 기사명 원터치 도우미
   if(activeDrivers.length > 0) {
     driverHelperHtml = `
       <div class="helper-box">
@@ -1172,7 +1238,6 @@ function renderDispatch(){
     `;
   }
 
-  // 출차 그룹 목록 빌딩
   const groupsHtml = dispatchStore.groups.map((g, gi) => {
     const rankEmoji = DISPATCH_RANK_EMOJIS[gi] || '🚛';
     return `
@@ -1199,10 +1264,9 @@ function renderDispatch(){
     `;
   }).join('');
 
-  // 입차 일정 목록 빌딩 (시간 설정을 시스템 터치 휠형 인풋으로 완전 전환)
   const inboundsHtml = dispatchStore.inbounds.map((ib, ii) => `
     <div class="dispatch-row">
-      <input type="time" class="inp" id="ib-time-${ii}" style="padding:10px; font-size:14.5px; text-align:center; font-weight:800; color:var(--teal3);" 
+      <input type="time" class="inp time-hint" id="ib-time-${ii}" style="padding:10px; font-size:14.5px; text-align:center; font-weight:800; color:var(--teal3);" 
              value="${formatTimeForInput(ib.time)}" 
              onchange="setInbound(${ii},'time',this.value)">
       <input class="inp" id="ib-people-${ii}" style="padding:10px; font-size:14.5px; font-weight:600;" 
@@ -1216,6 +1280,8 @@ function renderDispatch(){
   const previewText = customDispatchText !== null ? customDispatchText : dispatchText();
 
   return `
+    <div class="dow-bar">${dowBtns}</div>
+    ${banner}
     ${driverHelperHtml}
     
     <div style="margin-bottom:13px">
@@ -1235,7 +1301,6 @@ function renderDispatch(){
     ${inboundsHtml}
     <button class="btn-add-row" style="padding:10px; border-color:var(--teal2); color:var(--teal3);" onclick="addInbound()">＋ 입차 시간 추가</button>
 
-    <!-- 카톡 미리보기 -->
     <div class="preview-wrap" style="margin-top:16px;">
       <div class="preview-label">카톡 미리보기 (직접 편집 가능)</div>
       <textarea class="kakao-bubble${previewText?'':' empty'}" oninput="customDispatchText=this.value; autoResizePreviews();" placeholder="출차 및 입차 데이터를 등록하면 이곳에 자동으로 텍스트 공지가 생성됩니다.">${esc(previewText)}</textarea>
@@ -1243,10 +1308,12 @@ function renderDispatch(){
         <button class="btn btn-share" onclick="shareText(customDispatchText !== null ? customDispatchText : dispatchText())">💬 공유하기</button>
         <button class="btn btn-copy" onclick="copyText(customDispatchText !== null ? customDispatchText : dispatchText())">📋 복사</button>
       </div>
+      <button class="btn-save-tpl" onclick="saveDispatchAsTpl()">📌 이 설정을 ${DOW_FULL[dispatchWorkDow]} 출차 기본으로 저장</button>
     </div>
     <div style="height:10px"></div>
     <div class="mini-btns">
-      <button class="mini-btn danger" onclick="askClearDispatch()">전체 초기화</button>
+      <button class="mini-btn" onclick="reloadDispatchTpl()">기본으로 되돌리기</button>
+      <button class="mini-btn danger" onclick="askClearDispatch()">이 요일 기본 삭제</button>
     </div>
     <div style="height:20px"></div>
   `;
@@ -1254,7 +1321,7 @@ function renderDispatch(){
 
 function handleHelperChipClick(name) {
   if(!activeChipInputRef) {
-    showToast('아래의 [+ 기사추가] 입력칸이나 [기사 이름] 칸을 먼저 마우스로 클릭하고 기사를 선택해보세요.');
+    showToast('아래의 [+ 기사추가] 입력칸이나 [기사 이름] 칸을 먼저 클릭하고 기사를 선택하세요.');
     return;
   }
   
@@ -1334,21 +1401,40 @@ function setInbound(ii, key, val) {
   render();
 }
 
+function saveDispatchAsTpl() {
+  customDispatchText = null;
+  dispatchTplStore[dispatchWorkDow] = {
+    groups: dispatchStore.groups.map(g => ({ people: [...g.people] })),
+    inbounds: dispatchStore.inbounds.map(ib => ({ time: ib.time, people: ib.people })),
+    saved: true
+  };
+  saveDispatchTpl();
+  render();
+  showToast(`📌 ${DOW_FULL[dispatchWorkDow]} 출차 기본 형식으로 저장 완료`);
+}
+
+function reloadDispatchTpl() {
+  customDispatchText = null;
+  const targetTpl = dispatchTplStore[dispatchWorkDow];
+  dispatchStore.groups = deepDispatchData(targetTpl).groups;
+  dispatchStore.inbounds = deepDispatchData(targetTpl).inbounds;
+  render();
+  showToast('기본 형식으로 되돌렸어요');
+}
+
 function askClearDispatch() {
   dlgAction = 'clearDispatch';
-  document.getElementById('dlg-title').textContent = '출차 데이터 초기화';
-  document.getElementById('dlg-msg').textContent = '작성 중이던 출차 그룹 순위와\n입차 정보 리스트가 모두 지워집니다.';
-  document.getElementById('dlg-ok').textContent = '초기화';
+  document.getElementById('dlg-title').textContent = '이 요일 기본 삭제';
+  document.getElementById('dlg-msg').textContent = `${DOW_FULL[dispatchWorkDow]} 출차/입차 기본 데이터를 비웁니다.\n다른 요일 포맷은 유지됩니다.`;
+  document.getElementById('dlg-ok').textContent = '삭제';
   document.getElementById('overlay').classList.add('show');
 }
 
 function dispatchText() {
   const dObj = new Date(dispatchStore.date + 'T00:00:00');
   const dateStr = `${dObj.getMonth() + 1}월 ${dObj.getDate()}일`;
-  const dayKr = DAYS[dObj.getDay()]; // '수'
-  const dayFull = DOW_FULL[dObj.getDay()]; // '수요일'
+  const dayFull = DOW_FULL[dObj.getDay()];
 
-  // 출차순서 포맷팅 (🥇 🥈 🥉 등급 이모지 내장화)
   const ordersStr = dispatchStore.groups
     .map((g, gi) => {
       if(g.people.length === 0) return '';
@@ -1358,7 +1444,6 @@ function dispatchText() {
     .filter(Boolean)
     .join('\n');
     
-  // 입차 스케줄 포맷팅 (🕒 시계와 🚚 트럭 이모지 자동 바인딩 및 기사님 호칭 완전 제외)
   const inboundsStr = dispatchStore.inbounds
     .map(ib => {
       const timeVal = formatTimeForPreview(ib.time.trim());
@@ -1380,6 +1465,207 @@ function dispatchText() {
   });
 }
 
+/* ═══════════ 간선 입고 관리 (호차별 · @멘션) ═══════════ */
+/* Redash 조회 페이지 바로가기는 유지, 데이터는 호차별로 관리 */
+
+const INBOUND_BASE_URL = 'https://redash.delivus.co.kr/public/dashboards/nEnlpAHhLMe6r28kykOwZvznXK7CmDAPTg8y0A31';
+const RABBIT_PHONE = '1036535848';   // 딜리래빗 조회번호 (스펙 고정)
+
+let inboundStore = load('disp-inbound', {
+  set: 'trunk',        // trunk(간선) / rabbit(딜리래빗)
+  trunk: {
+    phone: '1036535848',
+    date: todayISO(),
+    cars: [ { time: '' } ]
+  },
+  rabbit: {
+    phone: '',
+    date: todayISO(),
+    cars: [ { time: '' }, { time: '' } ]   // 딜리래빗1, 딜리래빗 새벽
+  }
+});
+
+// 구버전 자동 마이그레이션 (rows 구조 → 호차, people 배열 → names, 공용 phone → 세트별)
+(function migrateInbound(){
+  if(inboundStore.rows && !inboundStore.trunk){
+    inboundStore = {
+      set:'trunk',
+      trunk:{ phone: inboundStore.phone || '1036535848', date: todayISO(), cars:[{time:''}] },
+      rabbit:{ phone: '', date: todayISO(), cars:[{time:''}] }
+    };
+    localStorage.setItem('disp-inbound', JSON.stringify(inboundStore));
+    return;
+  }
+  // 공용 phone이 최상위에 있던 구조 → 세트별로 이동
+  if(inboundStore.phone !== undefined){
+    if(inboundStore.trunk && inboundStore.trunk.phone===undefined) inboundStore.trunk.phone = inboundStore.phone;
+    if(inboundStore.rabbit && inboundStore.rabbit.phone===undefined) inboundStore.rabbit.phone = '';
+    delete inboundStore.phone;
+  }
+  ['trunk','rabbit'].forEach(k=>{
+    const st=inboundStore[k];
+    if(st){
+      if(st.phone===undefined) st.phone = (k==='trunk'?'1036535848':'');
+      if(Array.isArray(st.cars)){
+        st.cars.forEach(c=>{
+          if(c.people && c.names===undefined){ c.names = c.people.join(', '); delete c.people; }
+          if(c.names===undefined) c.names='';
+        });
+      }
+    }
+  });
+  // 딜리래빗은 항상 2칸(딜리래빗1 / 딜리래빗 새벽) 고정
+  if(inboundStore.rabbit){
+    if(!Array.isArray(inboundStore.rabbit.cars)) inboundStore.rabbit.cars=[];
+    while(inboundStore.rabbit.cars.length < 2) inboundStore.rabbit.cars.push({time:''});
+    if(inboundStore.rabbit.cars.length > 2) inboundStore.rabbit.cars = inboundStore.rabbit.cars.slice(0,2);
+  }
+})();
+
+function saveInbound(){ localStorage.setItem('disp-inbound', JSON.stringify(inboundStore)); }
+function inbCur(){ return inboundStore[inboundStore.set]; }   // 현재 세트
+
+// 입고 라벨: 간선=N호차, 딜리래빗=딜리래빗1/딜리래빗 새벽 (idx는 원본 0-based)
+function inbLabel(idx){
+  if(inboundStore.set==='trunk') return `${idx+1}호차`;
+  return idx===0 ? '딜리래빗1' : (idx===1 ? '딜리래빗 새벽' : `딜리래빗${idx+1}`);
+}
+
+function switchInbSet(s){
+  customInboundText = null;
+  inboundStore.set = s;
+  saveInbound();
+  render();
+}
+
+function buildInboundUrl(useYesterday){
+  const phone = RABBIT_PHONE;   // 딜리래빗 조회는 고정번호 사용
+  const params = new URLSearchParams();
+  params.set('org_slug','default');
+  if(useYesterday){ params.set('p_Date','d_yesterday'); }
+  else { params.set('p_Date', inbCur().date); }
+  params.set('p_휴대폰번호', phone);
+  return INBOUND_BASE_URL + '?' + params.toString();
+}
+
+function openInboundPage(useYesterday){
+  window.open(buildInboundUrl(useYesterday),'_blank');
+  showToast('🔗 조회 페이지를 새 창으로 열었어요');
+}
+
+function renderInbound(){
+  const cur = inbCur();
+  const isTrunk = inboundStore.set === 'trunk';
+  const previewText = customInboundText !== null ? customInboundText : inboundText();
+
+  // 호차 행들 (시각만: [시각][🗑])
+  const carsHtml = cur.cars.map((car, ci)=>`
+    <div class="dispatch-row" style="grid-template-columns:60px 1fr 38px;">
+      <div style="font-size:13.5px;font-weight:900;color:var(--blue3);text-align:center;">${inbLabel(ci)}</div>
+      <input type="time" class="inp time-hint" style="padding:10px; font-size:15px; text-align:center; font-weight:800; color:var(--teal3);"
+             value="${formatTimeForInput(car.time)}"
+             onchange="setInbCarTime(${ci}, this.value)">
+      ${isTrunk ? `<button class="qty-del" style="height:42px; width:38px;" onclick="delInbCar(${ci})">🗑</button>` : `<div style="width:38px"></div>`}
+    </div>`).join('');
+
+  // 딜리래빗 전용: 조회용 번호 + 조회 버튼
+  const lookupHtml = isTrunk ? '' : `
+    <div class="section-head" style="margin-top:2px;"><div class="section-title">🔗 딜리래빗 <b>조회 페이지</b> 바로 열기</div></div>
+    <div class="opt-row" style="margin-bottom:10px">
+      <div><div class="opt-text">📱 조회번호 <span style="color:var(--teal3);font-weight:800">${RABBIT_PHONE}</span></div><div class="opt-sub">딜리래빗 스펙 고정 번호입니다</div></div>
+      <span style="font-size:11px;color:var(--dim);border:1px solid var(--border2);border-radius:6px;padding:3px 8px;">고정</span>
+    </div>
+    <div class="row2" style="margin-bottom:16px">
+      <button class="btn-add-zone" style="margin:0;padding:13px;border-style:solid;border-color:#1d3a66;background:linear-gradient(135deg,#10243f,#13294a);color:var(--blue3);" onclick="openInboundPage(false)">📅 선택 날짜로 조회</button>
+      <button class="btn-add-zone" style="margin:0;padding:13px;border-style:solid;border-color:#155244;background:linear-gradient(135deg,#0a2620,#0d2e26);color:var(--teal3);" onclick="openInboundPage(true)">⏮ 어제자 바로 조회</button>
+    </div>`;
+
+  const bannerTxt = isTrunk
+    ? `호차별 <b>도착시각</b>을 터치로 정하면 카톡 문구가 만들어집니다.`
+    : `딜리래빗 <b>조회 페이지</b>에서 도착시간을 확인한 뒤, 시간을 넣어 카톡 문구를 만드세요.`;
+
+  return `
+    <div class="set-tabs">
+      <button class="set-tab ${isTrunk?'active':''}" onclick="switchInbSet('trunk')">🚚 간선입고</button>
+      <button class="set-tab ${!isTrunk?'active':''}" onclick="switchInbSet('rabbit')">🐰 딜리래빗</button>
+    </div>
+
+    <div class="tpl-banner">
+      <span class="tpl-banner-icon">${isTrunk?'🚚':'🐰'}</span>
+      <span class="tpl-banner-txt">${bannerTxt}</span>
+    </div>
+
+    ${lookupHtml}
+
+    <div class="field" style="margin-bottom:13px">
+      <label class="field-label">📅 입고 날짜</label>
+      <input type="date" class="inp" value="${cur.date}" onchange="inbCur().date=this.value;customInboundText=null;saveInbound();render()">
+    </div>
+
+    <div class="section-head" style="margin-top:14px;"><div class="section-title">🚛 ${isTrunk?`호차별 입고 시각 <b>${cur.cars.length}</b>대`:'딜리래빗 입고 시각'}</div></div>
+    ${carsHtml}
+    ${isTrunk ? `<button class="btn-add-row" style="padding:11px; border-color:var(--teal2); color:var(--teal3);" onclick="addInbCar()">＋ 호차 추가</button>` : ''}
+
+    <div class="preview-wrap">
+      <div class="preview-label">카톡 미리보기 (직접 편집 가능)</div>
+      <textarea class="kakao-bubble${previewText?'':' empty'}" oninput="customInboundText=this.value; autoResizePreviews();" placeholder="호차와 시각·기사를 넣으면 여기에 카톡 문구가 만들어집니다.">${esc(previewText)}</textarea>
+      <div class="actions">
+        <button class="btn btn-share" onclick="shareText(customInboundText !== null ? customInboundText : inboundText())">💬 공유하기</button>
+        <button class="btn btn-copy" onclick="copyText(customInboundText !== null ? customInboundText : inboundText())">📋 복사</button>
+      </div>
+    </div>
+    <div style="height:10px"></div>
+    <div class="mini-btns">
+      <button class="mini-btn danger" onclick="clearInbCars()">${isTrunk?'호차 전체 비우기':'시각 비우기'}</button>
+    </div>
+    <div style="height:20px"></div>`;
+}
+
+function addInbCar(){ customInboundText=null; inbCur().cars.push({time:''}); saveInbound(); render(); }
+function delInbCar(ci){ customInboundText=null; inbCur().cars.splice(ci,1); if(!inbCur().cars.length)inbCur().cars.push({time:''}); saveInbound(); render(); }
+function clearInbCars(){
+  customInboundText=null;
+  if(inboundStore.set==='rabbit'){
+    // 딜리래빗은 2칸 유지, 시각만 비움
+    inbCur().cars=[{time:''},{time:''}];
+  } else {
+    inbCur().cars=[{time:''}];
+  }
+  saveInbound(); render(); showToast('🗑 비웠어요');
+}
+function setInbCarTime(ci,v){ customInboundText=null; inbCur().cars[ci].time=v; saveInbound(); render(); }
+
+// 시각 "15:20" → "3시 20분" (12시간제)
+function timeToKor(t){
+  if(!t) return '';
+  let [h,m] = t.split(':').map(x=>parseInt(x,10));
+  if(isNaN(h)) return t;
+  let h12 = h % 12; if(h12===0) h12 = 12;
+  return `${h12}시 ${String(m||0).padStart(2,'0')}분`;
+}
+
+function inboundText(){
+  const cur = inbCur();
+  const isTrunk = inboundStore.set==='trunk';
+  const setName = isTrunk ? '간선' : '딜리래빗';
+  // 시간이 입력된 호차만, 단 원래 호차 번호(원본 인덱스)는 유지
+  const active = cur.cars
+    .map((c, idx)=>({c, idx}))
+    .filter(o=>o.c.time);
+  if(!active.length) return '';
+  let body = '';
+  active.forEach(o=>{
+    body += `${inbLabel(o.idx)} ${timeToKor(o.c.time)} 도착입니다\n`;
+  });
+  const tpl = getTemplate('inbound');
+  return formatTemplate(tpl, {
+    date: fmtKDate(cur.date),
+    set: setName,
+    rows: body
+  });
+}
+
+/* ═══════════ 설정 및 백업 관리 시스템 ═══════════ */
 function getApiKey(){return localStorage.getItem('gemini-key')||'';}
 const DEFAULT_MODEL='gemini-3.5-flash';
 const VALID_MODELS=['gemini-3.5-flash','gemini-3.1-flash-lite','gemini-2.5-flash'];
@@ -1392,8 +1678,7 @@ function openSettings(){
   document.getElementById('set-apikey').value=getApiKey();
   document.getElementById('set-model').value=getModel();
   
-  // 기기 내 저장된 템플릿 로드
-  const keys = ['roster', 'dawn', 'wx_heavy', 'wx_rain', 'wx_clear', 'volume', 'dispatch'];
+  const keys = ['roster', 'dawn', 'wx_heavy', 'wx_rain', 'wx_clear', 'tip_clear', 'tip_light', 'tip_normal', 'tip_heavy', 'volume', 'dispatch', 'inbound'];
   keys.forEach(k => {
     editingTemplates[k] = getTemplate(k);
   });
@@ -1427,15 +1712,19 @@ function onTemplateSelectorChange() {
   const newTa = document.getElementById('set-tpl-ta');
   newTa.value = editingTemplates[newKey];
   
-  // 하단 치환 변수 가이드 갱신
   const hints = {
     roster: `<b>💡 치환 변수 목록:</b><br><code>{emoji}</code> 이모지, <code>{date}</code> 날짜, <code>{title}</code> 제목, <code>{zones}</code> 구역 명단 리스트, <code>{total}</code> 총 인원수`,
     dawn: `<b>💡 치환 변수 목록:</b><br><code>{emoji}</code> 이모지, <code>{date}</code> 날짜, <code>{title}</code> 제목, <code>{zones}</code> 구역 명단 리스트, <code>{total}</code> 총 인원수`,
-    wx_heavy: `<b>💡 치환 변수 목록:</b><br><code>{time}</code> 갱신 시각, <code>{status_msg}</code> 비구름 진입 상황 안내문, <code>{rain_mm}</code> 강수량, <code>{prob}</code> 확률, <code>{duration}</code> 지속시간`,
-    wx_rain: `<b>💡 치환 변수 목록:</b><br><code>{time}</code> 갱신 시각, <code>{status_msg}</code> 비 시작 상황 안내문, <code>{rain_mm}</code> 강수량, <code>{prob}</code> 확률`,
-    wx_clear: `<b>💡 치환 변수 목록:</b><br><code>{time}</code> 갱신 시각, <code>{span_hours}</code> 예보 유지 범위 시간`,
+    wx_heavy: `<b>💡 치환 변수 목록:</b><br><code>{time}</code> 갱신 시각, <code>{status_msg}</code> 비구름 진입 상황 안내문, <code>{tip}</code> 강도별 기사 안내멘트, <code>{rain_mm}</code> 강수량, <code>{prob}</code> 확률, <code>{duration}</code> 지속시간`,
+    wx_rain: `<b>💡 치환 변수 목록:</b><br><code>{time}</code> 갱신 시각, <code>{status_msg}</code> 비 시작 상황 안내문, <code>{tip}</code> 강도별 기사 안내멘트, <code>{rain_mm}</code> 강수량, <code>{prob}</code> 확률`,
+    wx_clear: `<b>💡 치환 변수 목록:</b><br><code>{time}</code> 갱신 시각, <code>{span_hours}</code> 예보 유지 범위 시간, <code>{tip}</code> 비 없음 안내멘트`,
+    tip_clear: `<b>💡 비 없음 안내멘트</b><br>여러 문장을 <code>|</code>(막대기)로 구분하면 공유할 때마다 그중 하나가 랜덤으로 나옵니다.`,
+    tip_light: `<b>💡 약한 비 안내멘트</b><br>여러 문장을 <code>|</code>(막대기)로 구분하면 공유할 때마다 그중 하나가 랜덤으로 나옵니다.`,
+    tip_normal: `<b>💡 보통 비 안내멘트</b><br>여러 문장을 <code>|</code>(막대기)로 구분하면 공유할 때마다 그중 하나가 랜덤으로 나옵니다.`,
+    tip_heavy: `<b>💡 강한 비·폭우 안내멘트</b><br>여러 문장을 <code>|</code>(막대기)로 구분하면 공유할 때마다 그중 하나가 랜덤으로 나옵니다.`,
     volume: `<b>💡 치환 변수 목록:</b><br><code>{date}</code> 날짜, <code>{title}</code> 제목, <code>{rows}</code> 각 동별 물량 리스트, <code>{total}</code> 합계 수량`,
-    dispatch: `<b>💡 치환 변수 목록:</b><br><code>{date}</code> 날짜(예: 7월 8일), <code>{day}</code> 요일(예: 수요일), <code>{orders}</code> 출차 순서 목록, <code>{inbounds}</code> 입차 내역`
+    dispatch: `<b>💡 치환 변수 목록:</b><br><code>{date}</code> 날짜(예: 7월 8일), <code>{day}</code> 요일(예: 수요일), <code>{orders}</code> 출차 순서 목록, <code>{inbounds}</code> 입차 내역`,
+    inbound: `<b>💡 치환 변수 목록:</b><br><code>{set}</code> 구분(간선/딜리래빗), <code>{date}</code> 날짜, <code>{rows}</code> 호차별 도착시각 리스트`
   };
   document.getElementById('set-tpl-hint').innerHTML = hints[newKey] || '';
 }
@@ -1454,12 +1743,19 @@ function saveSettings(){
     localStorage.setItem('disp-tpl-' + key, editingTemplates[key]);
   }
   
+  // 설정에서 양식을 바꿨으면, 손댔던 미리보기 캐시를 비워 새 양식이 반영되게 함
+  customRosterText = null;
+  customWeatherText = null;
+  customVolumeText = null;
+  customDispatchText = null;
+  customInboundText = null;
+  
   closeSettings();
   render();
   showToast('⚙️ 설정 및 공유 양식이 기기에 안전하게 저장되었습니다.');
 }
 
-const BK_KEYS=['disp-roster-tpl','disp-dawn-tpl','disp-dispatch'];
+const BK_KEYS=['disp-roster-tpl','disp-dawn-tpl','disp-dispatch-tpl','disp-inbound'];
 let pendingImport=null;
 
 function openBackup(){document.getElementById('backup-sheet').classList.add('show');}
@@ -1468,13 +1764,14 @@ function closeBackup(){document.getElementById('backup-sheet').classList.remove(
 function collectBackupData(){
   const data={};
   BK_KEYS.forEach(k=>{const v=localStorage.getItem(k);if(v!==null)data[k]=v;});
-  return {app:'dispatch-organizer',kind:'roster-backup',version:5,exported:new Date().toISOString(),data};
+  return {app:'dispatch-organizer',kind:'roster-backup',version:6,exported:new Date().toISOString(),data};
 }
 function backupSummary(data){
   const parts=[];
   if(data['disp-roster-tpl'])parts.push('출근명단');
   if(data['disp-dawn-tpl'])parts.push('새벽반');
-  if(data['disp-dispatch'])parts.push('출차관리');
+  if(data['disp-dispatch-tpl'])parts.push('출차관리');
+  if(data['disp-inbound'])parts.push('입고');
   return parts.join(' + ')||'명단';
 }
 function exportBackupFile(){
@@ -1488,7 +1785,7 @@ function exportBackupFile(){
     setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},600);
     showToast(`📤 ${backupSummary(obj.data)} 백업을 저장했어요`);
   }catch(e){
-    showToast('백업 파일 내보내기를 실패했습니다. 브라우저 설정을 확인해주세요.','err');
+    showToast('백업 파일 내보내기를 실패했습니다.','err');
   }
 }
 
@@ -1513,7 +1810,7 @@ function tryImport(text){
   keys.forEach(k=>{pendingImport[k]=typeof data[k]==='string'?data[k]:JSON.stringify(data[k]);});
   dlgAction='doImport';
   document.getElementById('dlg-title').textContent='명단 복원';
-  document.getElementById('dlg-msg').textContent=`${backupSummary(pendingImport)} 기본 명단을 불러옵니다.\n현재 명단은 백업 내용으로 교체돼요.`;
+  document.getElementById('dlg-msg').textContent=`${backupSummary(pendingImport)} 기본 데이터를 불러옵니다.\n현재 데이터들은 백업 내용으로 교체돼요.`;
   document.getElementById('dlg-ok').textContent='복원';
   document.getElementById('overlay').classList.add('show');
 }
@@ -1527,11 +1824,18 @@ function applyImport(){
   pendingImport=null;
   initRoster('main');initRoster('dawn');
   
-  const dStore = localStorage.getItem('disp-dispatch');
-  if(dStore) dispatchStore = JSON.parse(dStore);
+  const dStore = localStorage.getItem('disp-dispatch-tpl');
+  if(dStore) dispatchTplStore = JSON.parse(dStore);
   
+  // 가동 버퍼 동기화
+  dispatchStore.groups = deepDispatchData(dispatchTplStore[dispatchWorkDow]).groups;
+  dispatchStore.inbounds = deepDispatchData(dispatchTplStore[dispatchWorkDow]).inbounds;
+
+  // 입고 저장소 재로드
+  inboundStore = load('disp-inbound', inboundStore);
+
   closeBackup();
-  showToast(`✅ ${summary} 명단을 복원했어요`);
+  showToast(`✅ ${summary} 데이터를 복원했어요`);
 }
 
 function setPasteMode(m){
@@ -1614,9 +1918,9 @@ async function runImageOCR(mode){
       const errTxt=await res.text();
       let msg='인식 실패';
       if(res.status===400&&/API_KEY|API key/i.test(errTxt)) msg='API 키가 올바르지 않아요';
-      else if(res.status===403) msg='API 키 권한 문제 — 키를 다시 발급해 보세요';
-      else if(res.status===404) msg=`모델(${model})을 찾을 수 없어요 — ⚙️ 설정에서 모델 변경`;
-      else if(res.status===429) msg='요청 한도 초과 — 잠시 후 다시';
+      else if(res.status===403) msg='API 키 권한 문제';
+      else if(res.status===404) msg=`모델을 찾을 수 없어요`;
+      else if(res.status===429) msg='요청 한도 초과';
       else msg=`오류 (${res.status})`;
       setStatus(msg,'err');return;
     }
@@ -1676,7 +1980,7 @@ function copyText(text){
   navigator.clipboard.writeText(text).then(()=>showToast('📋 복사 완료 — 단톡에 붙여넣기')).catch(()=>{
     const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
     document.body.appendChild(ta);ta.select();
-    try{document.execCommand('copy');showToast('📋 복사 완료 — 단톡에 붙여넣기');}catch(e){showToast('복사 실패 — 브라우저 제한','err');}
+    try{document.execCommand('copy');showToast('📋 복사 완료 — 단톡에 붙여넣기');}catch(e){showToast('복사 실패','err');}
     document.body.removeChild(ta);
   });
 }
@@ -1713,10 +2017,12 @@ document.getElementById('dlg-ok').onclick=function(){
     showToast('🗑 초기화했어요');
   }else if(dlgAction==='clearDispatch'){
     customDispatchText = null;
+    dispatchTplStore[dispatchWorkDow] = blankDispatchTpl();
+    saveDispatchTpl();
     dispatchStore.groups = [];
     dispatchStore.inbounds = [];
     saveDispatch();
-    showToast('🗑 출차 데이터를 전체 비웠어요');
+    showToast('🗑 이 요일의 출차 기본 설정을 비웠어요');
   }else if(dlgAction==='doImport'&&pendingImport){
     applyImport();
   }
@@ -1724,7 +2030,7 @@ document.getElementById('dlg-ok').onclick=function(){
 };
 
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function showToast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(type==='err'?' err':'');setTimeout(()=>t.className='toast'+(type==='err'?' err':''),2400);}
+function showToast(msg,type){const t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.className='toast show'+(type==='err'?' err':'');setTimeout(()=>t.className='toast'+(type==='err'?' err':''),2400);}
 
 render();
 initWeather();
