@@ -1857,19 +1857,20 @@ function lineWidth(s){
   return w;
 }
 const ZONE_SEPS = {
-  colon:   { label:'도곡: 이름',  fn:(e,n)=>`${e} ${n}:` },
-  bar:     { label:'도곡 | 이름', fn:(e,n)=>`${e} ${n} |` },
-  bracket: { label:'[도곡] 이름', fn:(e,n)=>`${e} [${n}]` },
-  dot:     { label:'도곡 · 이름', fn:(e,n)=>`${e} ${n} ·` }
+  pin:  { label:'📍 핀',   emoji:'📍' },
+  blue: { label:'🔹 도트', emoji:'🔹' },
+  flag: { label:'🚩 깃발', emoji:'🚩' }
 };
+const ZONE_EMOJIS = Object.keys(ZONE_SEPS).map(k=>ZONE_SEPS[k].emoji);
 function getZoneSep(){ const v=localStorage.getItem('disp-roster-sep'); return ZONE_SEPS[v]?v:'colon'; }
 function setZoneSep(v){ localStorage.setItem('disp-roster-sep', v); customRosterText=null; render(); }
 
 function zoneLineText(z, compact){
-  const emoji = z.emoji || '📍';
-  const sep = getZoneSep();
-  const head = ZONE_SEPS[sep].fn(emoji, z.name);
-  const nameSep = compact ? (sep==='dot' ? ' ' : '·') : ', ';
+  const st = ZONE_SEPS[getZoneSep()];
+  const custom = (z.emoji && ZONE_EMOJIS.indexOf(z.emoji) < 0) ? z.emoji : '';
+  const emoji = z.isBackup ? (z.emoji || '🆘') : (custom || st.emoji);
+  const head = `${emoji} ${z.name}:`;
+  const nameSep = compact ? '·' : ', ';
   const one = `${head} ${z.people.join(nameSep)}`;
   if (lineWidth(one) <= KAKAO_LINE_LIMIT) return one;
 
