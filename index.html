@@ -1862,11 +1862,11 @@ const ZONE_SEPS = {
   flag: { label:'🚩 깃발', emoji:'🚩' }
 };
 const ZONE_EMOJIS = Object.keys(ZONE_SEPS).map(k=>ZONE_SEPS[k].emoji);
-function getZoneSep(){ const v=localStorage.getItem('disp-roster-sep'); return ZONE_SEPS[v]?v:'colon'; }
+function getZoneSep(){ const v=localStorage.getItem('disp-roster-sep'); return ZONE_SEPS[v]?v:'pin'; }
 function setZoneSep(v){ localStorage.setItem('disp-roster-sep', v); customRosterText=null; render(); }
 
 function zoneLineText(z, compact){
-  const st = ZONE_SEPS[getZoneSep()];
+  const st = ZONE_SEPS[getZoneSep()] || ZONE_SEPS.pin;
   const custom = (z.emoji && ZONE_EMOJIS.indexOf(z.emoji) < 0) ? z.emoji : '';
   const emoji = z.isBackup ? (z.emoji || '🆘') : (custom || st.emoji);
   const head = `${emoji} ${z.name}:`;
