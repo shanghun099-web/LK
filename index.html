@@ -1857,7 +1857,7 @@ function getCompactMode(){ return localStorage.getItem('disp-roster-compact')===
 function setCompactMode(v){ localStorage.setItem('disp-roster-compact', v?'1':'0'); customRosterText=null; render(); }
 
 /* 카톡 한 줄에 들어가는 대략적 폭 (한글 2 · 영문/기호 1 · 이모지 2) */
-const KAKAO_LINE_LIMIT = 40;
+const KAKAO_LINE_LIMIT = 38;
 function lineWidth(s){
   let w = 0;
   for (const ch of String(s || '')) {
