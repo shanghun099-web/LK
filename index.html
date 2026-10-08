@@ -150,7 +150,7 @@ select.inp{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.
 .cal-day{background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:6px 4px;min-height:76px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:all 0.15s;}
 .cal-day:active{border-color:var(--blue2);background:var(--card2);}
 .cal-day.other-month{opacity:0.35;}
-.cal-day.is-today{border-color:var(--blue2);background:rgba(37,99,235,0.12);}
+.cal-day.is-today{border:2px solid #3b82f6;background:rgba(37,99,235,0.28);}
 .cal-day.selected{border-color:var(--amber2);box-shadow:0 0 0 2px rgba(245,158,11,0.3);}
 .cal-day-num{font-size:12px;font-weight:800;color:var(--text);}
 .cal-day-num.sun{color:#f08a8a;}
@@ -182,6 +182,26 @@ select.inp{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.
 .chip-dup{border-color:var(--amber2,#f59e0b);}
 .chip-slot{border-style:dashed;border-color:var(--teal3);color:var(--teal3);}
 .chip-sel{border-color:var(--blue2);background:rgba(59,130,246,.16);}
+.zone-mv{display:flex;flex-direction:column;gap:2px;flex-shrink:0;}
+.zone-mv button{width:30px;height:20px;border:none;border-radius:6px;background:var(--card2);color:var(--sub);font-size:10px;cursor:pointer;padding:0;line-height:1;}
+.zone-mv button:active{background:var(--blue);color:#fff;}
+.zone-mv button:disabled{opacity:.25;cursor:default;}
+.zone-moved{box-shadow:0 0 0 2px var(--blue2);transition:box-shadow .3s;}
+.chip-off{opacity:.55;text-decoration:line-through;text-decoration-color:#f87171;}
+.chip-offtag{font-size:10.5px;font-weight:900;color:#fff;background:#dc2626;border-radius:5px;padding:1px 5px;text-decoration:none;display:inline-block;}
+.roster-off-note{background:rgba(220,38,38,.1);border:1.5px solid rgba(220,38,38,.35);border-radius:12px;padding:10px 12px;margin-bottom:10px;font-size:13px;font-weight:700;color:#fca5a5;line-height:1.5;}
+.roster-off-note small{color:var(--sub);font-weight:600;font-size:11.5px;}
+.rh-open{width:100%;display:flex;flex-direction:column;align-items:center;gap:2px;padding:11px;margin-bottom:12px;border:1.5px solid var(--blue2);border-radius:12px;background:rgba(37,99,235,.12);color:var(--blue3);font-size:14.5px;font-weight:900;cursor:pointer;font-family:inherit;min-height:48px;}
+.rh-open small{font-size:11.5px;font-weight:600;color:var(--sub);}
+.dawn-theme .rh-open{border-color:var(--amber);background:rgba(245,158,11,.1);color:var(--amber2);}
+.rh-list{max-height:58vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;}
+.rh-item{text-align:left;padding:12px 13px;border:1.5px solid var(--border2);border-radius:12px;background:var(--card2);color:var(--text);cursor:pointer;font-family:inherit;}
+.rh-item:active{border-color:var(--blue2);}
+.rh-top{display:flex;align-items:center;gap:7px;font-size:14.5px;}
+.rh-tag{font-size:10.5px;font-weight:900;color:#fff;background:var(--blue);border-radius:99px;padding:2px 7px;}
+.rh-tag.wk{background:var(--card3);color:var(--blue3);}
+.rh-cnt{margin-left:auto;font-size:12px;font-weight:800;color:var(--sub);}
+.rh-zones{font-size:12px;color:var(--dim);margin-top:5px;line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
 .zone-warn{font-size:11.5px;font-weight:700;color:var(--amber2,#f59e0b);margin:8px 0 0 2px;}
 .pedit{margin-top:10px;background:var(--card2);border:1.5px solid var(--blue2);border-radius:12px;padding:10px;display:grid;gap:8px;}
 .pedit-lb{display:grid;gap:4px;font-size:12px;font-weight:700;color:var(--sub);}
@@ -262,6 +282,7 @@ input[type="time"].time-hint{
 .pv-seg button{padding:11px 4px;border:none;border-radius:10px;background:transparent;color:var(--sub);font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;min-height:44px;}
 .pv-seg button.on{background:var(--blue);color:#fff;}
 .dawn-theme .pv-seg button.on{background:var(--amber);}
+.pv-seg-sm button{padding:8px 4px;font-size:13px;min-height:40px;}
 .roster-img canvas{display:block;width:100%;height:auto;border-radius:14px;box-shadow:0 2px 14px rgba(0,0,0,.35);cursor:zoom-in;}
 .roster-img-empty{background:#f0f0f0;color:#888;border-radius:14px;padding:30px 16px;text-align:center;font-size:13.5px;}
 .pv-note{margin-top:9px;font-size:12px;color:var(--amber2);font-weight:700;line-height:1.5;}
@@ -321,6 +342,25 @@ input[type="time"].time-hint{
 .st-month-in{flex:1;position:relative;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17px;padding:0;height:48px;cursor:pointer;}
 .st-month-in span{pointer-events:none;}
 .st-month-in input{position:absolute;inset:0;width:100%;height:100%;opacity:0;border:none;font-size:16px;}
+.st-summode{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:12px;margin-bottom:12px;}
+.st-summode-q{font-size:13px;font-weight:800;color:var(--sub);margin:0 2px 9px;}
+.st-summode-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.st-summode-btns button{padding:10px 8px;min-height:56px;border:1.5px solid var(--border2);border-radius:11px;background:var(--card2);color:var(--sub);font-size:14px;font-weight:800;font-family:inherit;cursor:pointer;line-height:1.35;}
+.st-summode-btns button small{display:block;font-size:11px;font-weight:600;opacity:.8;margin-top:2px;}
+.st-summode-btns button.on{background:var(--teal);border-color:var(--teal);color:#04211c;}
+.st-summx thead th.g-one{color:#93c5fd;}
+.st-summx thead th.g-deli{color:#5eead4;}
+.st-summx td{padding:5px 4px;}
+.st-summx td.tot.bad{color:#ff9b9b;background:rgba(239,68,68,.14);}
+.st-sumok{background:rgba(13,148,136,.12);border:1px solid #155244;color:var(--teal3);border-radius:10px;padding:8px 11px;font-size:12.5px;margin:0 0 12px;line-height:1.5;}
+.st-sumrep{background:var(--card);border:1.5px solid var(--border2);border-radius:12px;padding:11px 13px;margin:0 0 12px;font-size:12.5px;line-height:1.6;color:var(--text);}
+.st-sumrep b.h{display:block;font-size:13px;margin-bottom:3px;}
+.st-sumrep .w{color:var(--amber2);}
+.st-sumrep .ok{color:var(--teal3);}
+.st-sumrep button{margin-top:8px;padding:7px 12px;border:1px solid var(--border2);border-radius:9px;background:var(--card3);color:var(--text);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;}
+.st-sumfile{width:100%;margin:0 0 10px;padding:12px;min-height:46px;border:1.5px dashed var(--border2);border-radius:11px;background:var(--card2);color:var(--blue3);font-size:13.5px;font-weight:800;font-family:inherit;cursor:pointer;}
+.st-sumitems{margin:4px 0 8px;}
+.st-sumitems-h{font-size:12px;font-weight:800;color:var(--sub);margin:0 2px 6px;}
 .st-sum{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px;}
 .st-sum div{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:11px 12px;min-width:0;}
 .st-sum small{display:block;font-size:11px;color:var(--sub);font-weight:700;margin-bottom:4px;}
@@ -666,7 +706,8 @@ input[type="time"].time-hint{
 .sd-bar-d small{display:block;font-size:9.5px;opacity:.75;}
 .sd-bar-d.sun{color:#f08a8a;}
 .sd-bar-d.sat{color:#7ab0f0;}
-.sd-bar.today .sd-bar-d small{color:var(--blue3);opacity:1;font-weight:900;}
+.sd-bar.today .sd-bar-d{background:#2563eb;color:#fff;border-radius:7px;padding:2px 5px;}
+.sd-bar.today .sd-bar-d small{color:#fff;opacity:1;font-weight:900;}
 .sd-week-foot{font-size:10.5px;color:var(--dim);margin-top:6px;text-align:center;}
 .sch-badge{flex-shrink:0;font-size:10.5px;font-weight:900;padding:2px 7px;border-radius:99px;}
 .sch-badge.on{background:rgba(34,197,94,.15);color:#4ade80;}
@@ -683,8 +724,8 @@ input[type="time"].time-hint{
 .bd-h small{display:block;font-size:9.5px;font-weight:700;color:var(--dim);margin-top:1px;}
 .bd-h.sun b,.bd-h.sun small{color:#f08a8a;}
 .bd-h.sat b,.bd-h.sat small{color:#7ab0f0;}
-.bd-h.today{background:rgba(37,99,235,.3) !important;}
-.bd-h.today b{color:#fff;}
+.bd-h.today{background:#2563eb !important;}
+.bd-h.today b,.bd-h.today small{color:#fff !important;}
 .bd-h.sel{box-shadow:inset 0 -3px 0 var(--amber2);}
 .bd-name{position:sticky;left:0;z-index:3;background:var(--card);text-align:left;padding:0 6px 0 10px !important;min-width:78px;white-space:nowrap;border-right:1.5px solid var(--border2);cursor:pointer;font-size:13px;font-weight:900;}
 .bd-name span{display:inline-block;max-width:60px;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;}
@@ -696,6 +737,10 @@ input[type="time"].time-hint{
 .bd tbody .bd-c.we{background:rgba(255,255,255,.035);}
 .bd tbody .bd-c.today{background:rgba(37,99,235,.13);}
 .bd tbody .bd-c.sel{background:rgba(245,158,11,.09);}
+/* 오늘 칸 — 선택한 날(주황)보다 우선, 파란 테두리 기둥으로 다른 날과 확실히 구분 (2026-10-08 사용자 요청) */
+.bd tbody .bd-c.today{background:rgba(37,99,235,.3) !important;box-shadow:inset 2px 0 0 #3b82f6,inset -2px 0 0 #3b82f6;}
+.bd tfoot td.today{box-shadow:inset 2px 0 0 #3b82f6,inset -2px 0 0 #3b82f6,inset 0 -2px 0 #3b82f6;background:rgba(37,99,235,.35);color:#fff;}
+.bd tfoot td.today.short{background:#b91c1c;}
 .bd-cell{width:26px;height:27px;border-radius:6px;border:none;cursor:pointer;font-family:inherit;font-size:11px;font-weight:900;padding:0;display:block;margin:0 auto;transition:transform .08s;}
 .bd-cell:active{transform:scale(.88);}
 .bd-cell.work{background:rgba(34,197,94,.14);}
@@ -900,6 +945,14 @@ body.tab-dragging .tabs{overflow-x:hidden;}
     </div>
   </div>
 </div>
+<div class="sheet-overlay" id="rhist-sheet" onclick="if(event.target===this)closeRosterHist()">
+  <div class="sheet pick-sheet">
+    <div class="sheet-title" id="rh-title">📂 지난 명단 불러오기</div>
+    <div class="sheet-sub">누르면 그날 명단(구역·이름·메모·번호)이 지금 명단에 그대로 들어옵니다. 날짜는 지금 날짜 그대로예요.</div>
+    <div class="rh-list" id="rh-list"></div>
+    <div class="sheet-btns"><button class="mini-btn" onclick="closeRosterHist()">닫기</button></div>
+  </div>
+</div>
 <div id="tab-ghost"></div>
 <div class="toast" id="toast"></div>
 
@@ -1078,8 +1131,41 @@ function sanitizeRosterArr(arr,defTitle){
   return base;
 }
 
+/* ── 지난 명단 기록 (2026-10-08 사용자 요청 "전일·이번 주 명단을 끌어와 그대로 쓰기") ──
+   그날 고치거나 보낸 명단을 날짜별로 남김 → 📂 지난 명단 불러오기 + 앱을 다시 열어도 그날 고친 명단 유지.
+   요일 기본을 띄우기만 하고 손대지 않은 날은 남기지 않음(보내면 남김). 최근 45일만 보관 */
+const ROSTER_HIST_KEY='disp-roster-hist', ROSTER_HIST_DAYS=45;
+let rosterHist=load(ROSTER_HIST_KEY,null);
+if(!rosterHist||typeof rosterHist!=='object') rosterHist={};
+['main','dawn'].forEach(k=>{ if(!rosterHist[k]||typeof rosterHist[k]!=='object') rosterHist[k]={}; });
+function rosterSig(w){ return JSON.stringify([w.title||'',w.zones||[]]); }
+function rosterHistGet(key,iso){ const h=rosterHist[key][iso]; return (h&&Array.isArray(h.zones))?h:null; }
+/* 그 날짜 명단 띄우기 — 기록이 있으면 기록, 없으면 요일 기본 */
+function rosterSetWork(R,iso,dow){
+  const h=rosterHistGet(R.key,iso);
+  R.work={date:iso,title:h?(h.title||R.defTitle):R.tpl[dow].title,zones:deepZones(h?h.zones:R.tpl[dow].zones)};
+  R.loadedSig=rosterSig(R.work);
+}
+/* render 마다 부름. forceKey = 보내기·저장 때 손 안 댄 명단도 남김 */
+function rosterHistRecord(forceKey){
+  let changed=false;
+  ['main','dawn'].forEach(k=>{
+    const R=rosters[k]; if(!R.work||!R.work.date) return;
+    const sig=rosterSig(R.work), old=rosterHist[k][R.work.date];
+    if(old&&rosterSig(old)===sig) return;
+    if(!old&&forceKey!==k&&sig===R.loadedSig) return;
+    if(!old&&!R.work.zones.some(z=>!z.isDiv&&z.people.length)) return;
+    rosterHist[k][R.work.date]={title:R.work.title,zones:deepZones(R.work.zones),at:Date.now()};
+    changed=true;
+  });
+  if(!changed) return;
+  const cut=toLocalISO(new Date(Date.now()-ROSTER_HIST_DAYS*864e5));
+  ['main','dawn'].forEach(k=>Object.keys(rosterHist[k]).forEach(d=>{ if(d<cut) delete rosterHist[k][d]; }));
+  try{ localStorage.setItem(ROSTER_HIST_KEY,JSON.stringify(rosterHist)); }catch(e){}
+}
+
 function initRoster(key){
-  const R=rosters[key];
+  const R=rosters[key]; R.key=key;
   const raw=load(R.lsKey,null);
   if(!raw){
     R.tpl=[0,1,2,3,4,5,6].map(()=>blankTpl(R.defTitle));
@@ -1091,7 +1177,7 @@ function initRoster(key){
     R.tpl=sanitizeRosterArr(raw,R.defTitle);
   }
   R.workDow=dowOf(todayISO());
-  R.work={date:todayISO(),title:R.tpl[R.workDow].title,zones:deepZones(R.tpl[R.workDow].zones)};
+  rosterSetWork(R,todayISO(),R.workDow);
 }
 initRoster('main');
 initRoster('dawn');
@@ -1333,13 +1419,12 @@ function applyDayRollover(force){
   if (!force && t === lastWorkDay) return false;
   lastWorkDay = t;
   const dow = dowOf(t);
+  rosterHistRecord();
 
   ['main','dawn'].forEach(k=>{
     const R = rosters[k];
     R.workDow = dow;
-    R.work.date = t;
-    R.work.title = R.tpl[dow].title;
-    R.work.zones = deepZones(R.tpl[dow].zones);
+    rosterSetWork(R, t, dow);
   });
 
   if (scheduleStore) {
@@ -2300,6 +2385,7 @@ function renderRoster(){
   const zonesHtml=R.work.zones.map((z,zi)=>{
     if(z.isDiv) return `
     <div class="zone zone-div">
+      ${zoneMoveHTML(zi,R.work.zones.length)}
       <span class="zdiv-bar">━━</span>
       <input class="zone-name" value="${esc(z.name)}" placeholder="묶음 이름 (예: 송파)" onchange="setZone(${zi},'name',this.value)">
       <span class="zdiv-bar">━━</span>
@@ -2311,6 +2397,7 @@ function renderRoster(){
     return `
     <div class="zone" style="${z.isBackup?'border-color:rgba(245,158,11,.45);background:rgba(245,158,11,.05);':''}">
       <div class="zone-top">
+        ${zoneMoveHTML(zi,R.work.zones.length)}
         <input class="zone-emoji" value="${esc(z.emoji||'📍')}" maxlength="2" onchange="setZone(${zi},'emoji',this.value)">
         <input class="zone-name" value="${esc(z.name)}" placeholder="구역명" onchange="setZone(${zi},'name',this.value)">
         <button class="zone-del" title="백업 지정" style="${z.isBackup?'background:rgba(245,158,11,.18);color:var(--amber2)':''}" onclick="toggleZoneBackup(${zi})">🆘</button>
@@ -2319,10 +2406,11 @@ function renderRoster(){
       ${(z.nums||rosterNumsOpen[zi])?`<div class="zone-nums-row"><span>구역 번호</span><input id="znum-${zi}" class="zone-nums" value="${esc(z.nums.replace(/·/g,', '))}" placeholder="예: 104, 105, 106" inputmode="text" onchange="setZoneNums(${zi},this.value)"></div>`:''}
            ${zoneMainLines(z,getCompactMode()).length>1?`<div style="font-size:10.5px;color:var(--blue3);font-weight:700;margin:-4px 0 8px 2px;">↩️ 인원이 많아 카톡에서 2줄로 나눠 보냅니다</div>`:''}
       <div class="chips">
-        ${ppl.map((o,pi)=>`<span class="chip${zDups.indexOf(o.n)>=0?' chip-dup':''}${ed&&sel[1]===pi?' chip-sel':''}${o.n==='신규'?' chip-slot':''}" onclick="selPerson(${zi},${pi})">${esc(o.n)}${o.m?`<span class="chip-memo">${esc(o.m)}</span>`:''}${o.nw&&o.n!=='신규'?'<span class="chip-new">신규</span>':''}<button class="chip-x" onclick="event.stopPropagation();delPerson(${zi},${pi})">✕</button></span>`).join('')}
+        ${ppl.map((o,pi)=>`<span class="chip${zDups.indexOf(o.n)>=0?' chip-dup':''}${ed&&sel[1]===pi?' chip-sel':''}${o.n==='신규'?' chip-slot':''}${rosterIsOff(R,z.people[pi])?' chip-off':''}" onclick="selPerson(${zi},${pi})">${esc(o.n)}${rosterIsOff(R,z.people[pi])?'<span class="chip-offtag">휴무</span>':''}${o.m?`<span class="chip-memo">${esc(o.m)}</span>`:''}${o.nw&&o.n!=='신규'?'<span class="chip-new">신규</span>':''}<button class="chip-x" onclick="event.stopPropagation();delPerson(${zi},${pi})">✕</button></span>`).join('')}
         <span class="chip-add"><input id="padd-${zi}" placeholder="+ 이름 (여러 명 띄어쓰기)" onkeydown="if(event.key==='Enter'){event.preventDefault();const v=this.value;this.value='';addPerson(${zi},v,true);}" onblur="const v=this.value;this.value='';if(v.trim())addPerson(${zi},v);"></span>
       </div>
       ${zDups.length?`<div class="zone-warn">⚠️ ${esc(zDups.join(', '))} — 다른 구역에도 있어요</div>`:''}
+      ${z.people.length&&z.people.every(p=>rosterIsOff(R,p))?`<div class="zone-warn" style="color:#f87171">🔴 모두 휴무라 이 구역이 카톡·이미지에서 빠져요 — 대신할 사람을 넣으세요</div>`:''}
       ${ed?`<div class="pedit">
         <label class="pedit-lb">이름<input class="inp" value="${esc(ed.n)}" oninput="setPersonField(${zi},${sel[1]},'n',this.value)"></label>
         <label class="pedit-lb">메모 · 추가로 맡는 곳<input class="inp" value="${esc(ed.m)}" placeholder="예: 선경·우성 / 4동·딜" oninput="setPersonField(${zi},${sel[1]},'m',this.value)"></label>
@@ -2342,10 +2430,12 @@ function renderRoster(){
   const previewText = customRosterText !== null ? customRosterText : rosterText();
   const imgView = getRosterView()==='img';
 
-  const workCnt = k => rosterUniqNames(rosters[k].work.zones.filter(z=>!z.isBackup)).length;
+  const workCnt = k => rosterUniqNames(rosterLiveZones(rosters[k]).filter(z=>!z.isBackup)).length;
+  const liveZ = rosterLiveZones(R), offNames = rosterOffNames(R);
   return `${shiftSwitchHTML({ day: workCnt('main'), dawn: workCnt('dawn') })}<div class="${R.theme}">
     <div class="dow-bar">${dowBtns}</div>
     ${banner}
+    <button class="rh-open" onclick="openRosterHist()">📂 지난 명단 불러오기<small>${rosterHistDates().length?'어제·이번 주 명단을 그대로 가져와요 · '+rosterHistDates().length+'일치':'고치거나 보낸 명단이 날짜별로 쌓여요'}</small></button>
     <div class="row2" style="margin-bottom:13px">
       <div class="field" style="margin:0"><label class="field-label">📅 날짜</label><input type="date" class="inp" value="${R.work.date}" onchange="cur().work.date=this.value;customRosterText=null;render()"></div>
       <div class="field" style="margin:0"><label class="field-label">📋 제목</label><input class="inp" value="${esc(R.work.title)}" placeholder="${esc(R.defTitle)}" onchange="cur().work.title=this.value;customRosterText=null;render()"></div>
@@ -2367,6 +2457,10 @@ function renderRoster(){
           <div><div class="opt-text">이름 간격 좁게</div><div class="opt-sub">쉼표 공백을 없애 한 줄에 더 많이 담습니다 (권장)</div></div>
           <label class="switch"><input type="checkbox" ${getCompactMode()?'checked':''} onchange="setCompactMode(this.checked)"><span class="slider"></span></label>
         </div>
+        <div class="opt-row" style="margin:0 0 9px">
+          <div><div class="opt-text">휴무자 자동 빼기</div><div class="opt-sub">근무/휴무 탭에서 그날 휴무인 사람은 카톡 글·이미지에서 뺍니다</div></div>
+          <label class="switch"><input type="checkbox" ${getRosterAutoOff()?'checked':''} onchange="setRosterAutoOff(this.checked)"><span class="slider"></span></label>
+        </div>
         <div class="opt-text" style="margin-bottom:6px">구역 · 이름 구분 방식</div>
         <div class="paste-mode" style="margin-bottom:0">
           ${Object.keys(ZONE_SEPS).map(k=>`<button class="paste-mode-btn ${k===getZoneSep()?'active':''}" style="padding:9px 2px;font-size:11.5px" onclick="setZoneSep('${k}')">${esc(ZONE_SEPS[k].label)}</button>`).join('')}
@@ -2374,8 +2468,9 @@ function renderRoster(){
       </div>
     </details>
     <div class="section-head">
-      <div class="section-title">구역 <b>${R.work.zones.filter(z=>!z.isBackup&&!z.isDiv).length}</b>개 · 근무 <b>${rosterUniqNames(R.work.zones.filter(z=>!z.isBackup)).length}</b>명${rosterNewCount(R.work.zones)?` (신규 ${rosterNewCount(R.work.zones)})`:''} · 🆘 백업 <b>${rosterUniqNames(R.work.zones.filter(z=>z.isBackup)).length}</b>명</div>
+      <div class="section-title">구역 <b>${R.work.zones.filter(z=>!z.isBackup&&!z.isDiv).length}</b>개 · 근무 <b>${rosterUniqNames(liveZ.filter(z=>!z.isBackup)).length}</b>명${rosterNewCount(liveZ)?` (신규 ${rosterNewCount(liveZ)})`:''} · 🆘 백업 <b>${rosterUniqNames(liveZ.filter(z=>z.isBackup)).length}</b>명</div>
     </div>
+    ${offNames.length?`<div class="roster-off-note">🔴 휴무 <b>${offNames.length}명</b> — ${esc(offNames.join(', '))}<br><small>근무/휴무 탭 ${fmtKDate(R.work.date)} 기준이라 카톡 글·이미지에서 자동으로 빠져요</small></div>`:''}
     ${zonesHtml}
     <div class="add-zone-row">
       <button class="btn-add-zone" onclick="addZone()">＋ 구역 추가</button>
@@ -2392,11 +2487,15 @@ function renderRoster(){
       <textarea id="roster-pv" class="kakao-bubble${previewText?'':' empty'}" oninput="customRosterText=this.value; autoResizePreviews(); document.getElementById('roster-apply').hidden=false;" placeholder="구역과 이름을 입력하면 여기에 미리보기가 나옵니다.">${esc(previewText)}</textarea>
       <button id="roster-apply" class="btn-apply" ${customRosterText!==null?'':'hidden'} onclick="applyRosterEdit()">✅ 고친 글을 명단에 반영 (입력칸 · 이미지)</button>
       <div class="actions">
-        <button class="btn btn-share" onclick="shareText(customRosterText !== null ? customRosterText : rosterText())">💬 공유하기</button>
-        <button class="btn btn-copy" onclick="copyText(customRosterText !== null ? customRosterText : rosterText())">📋 복사</button>
+        <button class="btn btn-share" onclick="rosterHistRecord(cur().key);shareText(customRosterText !== null ? customRosterText : rosterText())">💬 공유하기</button>
+        <button class="btn btn-copy" onclick="rosterHistRecord(cur().key);copyText(customRosterText !== null ? customRosterText : rosterText())">📋 복사</button>
       </div>
       </div>
-      ${imgView?`<div class="preview-label">이미지 미리보기 · 누르면 크게 보기</div>
+      ${imgView?`<div class="pv-seg pv-seg-sm">
+        <button class="${getRosterCols()===2?'':'on'}" onclick="setRosterCols(1)">📄 1단 · 길게</button>
+        <button class="${getRosterCols()===2?'on':''}" onclick="setRosterCols(2)">📰 2단 · 넓게</button>
+      </div>
+      <div class="preview-label">이미지 미리보기 · 누르면 크게 보기</div>
       <div id="roster-img" class="roster-img" onclick="rosterImgZoom()"></div>
       ${customRosterText!==null?'<div class="pv-note">✏️ 카톡 글에서 고친 내용이 아직 명단에 반영되지 않았어요.</div><button class="btn-apply" onclick="applyRosterEdit()">✅ 고친 글을 명단에 반영</button>':''}
       <div class="actions">
@@ -2446,9 +2545,22 @@ function rosterDupNames(zones){
   zones.forEach(z=>{const s={};(z.people||[]).forEach(p=>{const n=rosterBaseName(p);if(!n||n==='신규'||s[n])return;s[n]=1;cnt[n]=(cnt[n]||0)+1;});});
   return Object.keys(cnt).filter(n=>cnt[n]>1);
 }
+/* 근무/휴무 탭에서 그날 휴무인 사람은 카톡 글·이미지·인원 수에서 자동으로 뺌 (2026-10-08 사용자 요청)
+   명단 자체는 그대로 두어서 휴무를 풀면 다시 나옴. 표시 옵션에서 끌 수 있음(disp-roster-autooff) */
+function getRosterAutoOff(){ try{ return localStorage.getItem('disp-roster-autooff')!=='0'; }catch(e){ return true; } }
+function setRosterAutoOff(v){ try{ localStorage.setItem('disp-roster-autooff', v?'1':'0'); }catch(e){} customRosterText=null; render(); }
+function rosterIsOff(R,p){
+  if(!getRosterAutoOff()) return false;
+  const sh=R===rosters.dawn?'dawn':'day', n=rosterBaseName(p);
+  if(!n||n==='신규') return false;
+  return schList(sh).indexOf(n)>=0&&getWorkerStatus(n,R.work.date,sh)==='OFF';
+}
+function rosterLiveZones(R){ R=R||cur(); return R.work.zones.map(z=>z.isDiv?z:Object.assign({},z,{people:z.people.filter(p=>!rosterIsOff(R,p))})); }
+function rosterOffNames(R){ R=R||cur(); const out=[]; R.work.zones.forEach(z=>z.people.forEach(p=>{ const n=rosterBaseName(p); if(rosterIsOff(R,p)&&out.indexOf(n)<0) out.push(n); })); return out; }
+
 function rosterText(){
   const R=cur();
-  const active=R.work.zones.filter(z=>z.isDiv||(z.name.trim()&&z.people.length));
+  const active=rosterLiveZones(R).filter(z=>z.isDiv||(z.name.trim()&&z.people.length));
   if(!active.some(z=>!z.isDiv)) return '';
 
   const compact=getCompactMode();
@@ -2494,6 +2606,25 @@ function setZone(zi,key,v){
 }
 function setZoneNums(zi,v){customRosterText=null;const z=cur().work.zones[zi];if(!z)return;z.nums=normNums(v);if(!z.nums)delete rosterNumsOpen[zi];render();}
 function openZoneNums(zi){rosterNumsOpen[zi]=1;render();const el=document.getElementById('znum-'+zi);if(el)el.focus();}
+/* 구역·구분선 순서 바꾸기 ▲▼ (2026-10-08 사용자 요청) — 옮긴 칸이 화면에서 같은 자리에 보이게 스크롤을 맞춤 */
+function zoneMoveHTML(zi,n){
+  return `<div class="zone-mv"><button ${zi===0?'disabled':''} onclick="moveZone(${zi},-1)" aria-label="위로">▲</button><button ${zi===n-1?'disabled':''} onclick="moveZone(${zi},1)" aria-label="아래로">▼</button></div>`;
+}
+function moveZone(zi,dir){
+  const zs=cur().work.zones, j=zi+dir;
+  if(j<0||j>=zs.length) return;
+  const els=()=>document.querySelectorAll('#content .zone');
+  const before=els()[zi]?els()[zi].getBoundingClientRect().top:null;
+  [zs[zi],zs[j]]=[zs[j],zs[zi]];
+  customRosterText=null; rosterSel=null; rosterNumsOpen={};
+  render();
+  const el=els()[j]; if(!el) return;
+  if(before!==null){
+    const d=el.getBoundingClientRect().top-before, sc=document.getElementById('content');
+    if(sc&&sc.scrollHeight>sc.clientHeight+5) sc.scrollTop+=d; else window.scrollBy(0,d);
+  }
+  el.classList.add('zone-moved'); setTimeout(()=>el.classList.remove('zone-moved'),600);
+}
 function delZone(zi){customRosterText=null;rosterSel=null;rosterNumsOpen={};cur().work.zones.splice(zi,1);render();}
 function addZone(){customRosterText=null;cur().work.zones.push({emoji:'📍',name:'',nums:'',people:[],isBackup:false,isDiv:false});render();}
 function addDivider(){customRosterText=null;cur().work.zones.push({emoji:'',name:'',nums:'',people:[],isBackup:false,isDiv:true});render();}
@@ -2570,10 +2701,12 @@ function zoneLineText(z, compact){
    카톡 글을 직접 고친 내용은 반영하지 않음 */
 function getRosterView(){ try{ return localStorage.getItem('disp-roster-view')==='img'?'img':'text'; }catch(e){ return 'text'; } }
 function setRosterView(v){ try{ localStorage.setItem('disp-roster-view', v); }catch(e){} render(); }
+function getRosterCols(){ try{ return localStorage.getItem('disp-roster-cols')==='2'?2:1; }catch(e){ return 1; } }
+function setRosterCols(n){ try{ localStorage.setItem('disp-roster-cols', String(n)); }catch(e){} render(); }
 function rosterDocDate(iso){ const d=new Date(iso+'T00:00:00'); return d.getFullYear()+'. '+(d.getMonth()+1)+'. '+d.getDate()+'.('+DAYS[d.getDay()]+')'; }
 function rosterImgData(){
   const R=cur();
-  const active=R.work.zones.filter(z=>z.isDiv||(z.name.trim()&&z.people.length));
+  const active=rosterLiveZones(R).filter(z=>z.isDiv||(z.name.trim()&&z.people.length));
   if(!active.some(z=>!z.isDiv)) return null;
   const norm=active.filter(z=>!z.isBackup), back=active.filter(z=>z.isBackup);
   const work=rosterUniqNames(norm);
@@ -2582,10 +2715,10 @@ function rosterImgData(){
     dawn: schShift()==='dawn', date: fmtKDate(R.work.date), title: R.work.title||R.defTitle,
     shift: schShift()==='dawn'?'새벽반':'당일배송반', dateFull: rosterDocDate(R.work.date),
     norm, back, work: work.length, backN, newCnt: rosterNewCount(active),
-    zoneCnt: norm.filter(z=>!z.isDiv).length
+    zoneCnt: norm.filter(z=>!z.isDiv).length, cols: getRosterCols()
   };
 }
-/* 출근명단 이미지 — LK로지스 로고 + 큰 글씨 (카톡에서 폰 화면 폭으로 볼 때 이름이 16pt 이상 되도록 600폭에 27px)
+/* 출근명단 이미지 — LK로지스 로고 + 큰 글씨 (카톡에서 폰 화면 폭으로 볼 때 이름이 16pt 이상 되도록 600폭에 27px, 2단은 940폭~)
    흰 바탕 · 회사 남색/하늘색 줄 · 포인트 색 하나(당일 파랑 / 새벽 주황) · 신규 초록.
    당일배송반 = 구역 (번호) 제목 + 이름 4칸 정렬, 메모는 이름 옆 꼬리표
    새벽반 = '구역 (번호) | 이름' 한 줄 표 (사용자 결정 2026-10-05), 한 구역이라도 넘치면 당일 모양 */
@@ -2593,13 +2726,28 @@ const rosterLogo={mark:new Image(),text:new Image()};
 rosterLogo.mark.src='logo-lk-mark.png';
 rosterLogo.text.src='logo-lk-text.png';
 [rosterLogo.mark,rosterLogo.text].forEach(i=>{ i.onload=()=>rosterImgRefresh(); });
+/* 2단(d.cols===2): 길면 카톡이 긴 변 기준으로 통째로 줄여(세로 5800 → 1/5) 흐려져서,
+   구역을 두 칸에 나눠 담아 정사각형에 가깝게 만든 모양 (2026-10-08 사용자 요청, 1단과 골라 씀) */
 function rosterCardCanvas(d, dpr){
-  const W=600, P=30, IN=W-P*2, F="'Noto Sans KR',sans-serif";
+  const two=d.cols===2, GAP=40, F="'Noto Sans KR',sans-serif";
+  let CIN=two?420:540;
+  /* 새벽반 2단: 구역 번호가 한 칸 안에서 세 줄로 꺾이지 않게 칸을 넓힘 (최대 540) — '/' 앞뒤는 원래 따로 줄 */
+  if(two&&d.dawn){
+    const m=document.createElement('canvas').getContext('2d');
+    const tw=(t,sz,w)=>{ m.font=w+' '+sz+'px '+F; return m.measureText(t).width; };
+    const zs=d.norm.concat(d.back).filter(z=>!z.isDiv), PW=Math.round(26*0.62)+8;
+    const numNeed=Math.max(0,...zs.map(z=>z.nums?PW+28+Math.max(...('('+z.nums+')').split(/(?<=\/)/).map(t=>tw(t,21,700))):0));
+    const lineNeed=Math.max(0,...zs.map(z=>z.people.map(personParse).reduce((a,o,i)=>a+(i?28:0)+tw(o.n,27,500)
+      +(o.nw&&o.n!=='신규'?tw('신규',16,800)+7:0)+(o.m?10+tw(o.m.replace(/^\+\s*/,''),21,700)+20:0),0)));
+    CIN=Math.min(540,Math.max(CIN,Math.ceil(numNeed+lineNeed+8)));
+  }
+  const W=two?CIN*2+60+GAP:600;
   const NAVY='#013C73', SKY='#1296E0';
   const AC=d.dawn?'#C2410C':'#0A5FA8', SOFT=d.dawn?'#FFEDD5':'#E1EFFA', GR='#15803D', INK='#111827', SUB='#4b5563', LN='#e5e7eb';
-  const NS=4, CW=IN/NS, LH=46, NM=27;
+  const NS=two?3:4, LH=46, NM=27;
   const okImg=i=>i.complete&&i.naturalWidth>0;
   const pass=(x,draw)=>{
+    let P=30, IN=W-60;
     const font=(sz,w)=>{ x.font=w+' '+sz+'px '+F; };
     const tw=(t,sz,w)=>{ font(sz,w); return x.measureText(t).width; };
     const T=(t,X,Y,o)=>{ if(!draw) return; o=o||{}; font(o.s||15,o.w||500); x.fillStyle=o.c||INK; x.textAlign=o.a||'left'; x.textBaseline='middle'; x.fillText(t,X,Y); };
@@ -2651,6 +2799,7 @@ function rosterCardCanvas(d, dpr){
       x.fillStyle='#fff'; x.beginPath(); x.arc(cx,cy,r*0.42,0,Math.PI*2); x.fill();
     };
 
+    IN=CIN; const CW=IN/NS;
     let first=true;
     /* 당일 모양 — 구역 (번호) 제목 줄 + 이름 4칸. 메모는 이름 바로 뒤 색 꼬리표 */
     const zoneBlock=z=>{
@@ -2710,8 +2859,9 @@ function rosterCardCanvas(d, dpr){
     });
     const lineW=z=>inl(z).reduce((a,it,i)=>a+it.w+(i?28:0),0);
     /* 구역 칸 폭: 이름 칸은 가장 긴 이름 줄만큼만 남기고 나머지 빈자리를 구역 칸에 줌 (최소 290)
-       → 긴 구역·번호가 덜 꺾이고 글씨 크기는 그대로 (2026-10-06 사용자 요청 "옆으로 늘려") */
-    const ZCAP=Math.max(290,IN-Math.max(0,...zs.map(lineW))-8);
+       → 긴 구역·번호가 덜 꺾이고 글씨 크기는 그대로 (2026-10-06 사용자 요청 "옆으로 늘려")
+       2단은 칸이 좁아 최소 170 — 번호가 몇 줄로 꺾여도 한 줄 표 모양을 지킴 */
+    const ZCAP=Math.max(two?170:290,IN-Math.max(0,...zs.map(lineW))-8);
     const sameLine=zs.every(z=>zW(z)+(z.nums?10+nW(z):0)+28<=ZCAP);
     const ZC=Math.min(ZCAP,Math.max(110,...zs.map(z=>(sameLine?zW(z)+(z.nums?10+nW(z):0):Math.max(zW(z),PW+nW(z)))+28)));
     const compact=d.dawn&&zs.every(z=>ZC+lineW(z)<=IN);
@@ -2738,8 +2888,28 @@ function rosterCardCanvas(d, dpr){
     };
     const one=compact?zoneLine:zoneBlock;
     if(compact) y+=6;
-    d.norm.forEach(z=>{ if(z.isDiv){ label(z.name.trim()||'─'); first=true; return; } one(z); });
-    if(d.back.length){ label('백업 인원','#B45309'); first=true; d.back.forEach(one); }
+    const items=d.norm.map(z=>z.isDiv?{lab:z.name.trim()||'─'}:{z});
+    if(d.back.length){ items.push({lab:'백업 인원',c:'#B45309'}); d.back.forEach(z=>items.push({z})); }
+    const run=it=>{ if(it.lab){ label(it.lab,it.c); first=true; } else one(it.z); };
+    if(!two) items.forEach(run);
+    else {
+      /* 덩어리마다 높이를 재서 두 칸 높이가 가장 비슷해지는 곳에서 나눔 (구분선 제목이 왼쪽 끝에 홀로 남지 않게) */
+      const hs=items.map(it=>{ const sd=draw, sf=first, sy=y; draw=false; first=true; y=0; run(it); const h=y; draw=sd; first=sf; y=sy; return h; });
+      const sum=hs.reduce((a,h)=>a+h,0);
+      /* 오른쪽 칸이 묶음(송파 등) 중간에서 시작하면 그 묶음 제목을 '송파 · 이어서'로 한 번 더 달아 줌 */
+      const labBefore=i=>{ for(let j=i-1;j>=0;j--) if(items[j].lab) return j; return -1; };
+      let k=items.length, best=Infinity, acc=0;
+      for(let i=1;i<items.length;i++){ acc+=hs[i-1]; const lb=items[i].lab?-1:labBefore(i);
+        const m=Math.max(acc,sum-acc+(lb>=0?hs[lb]:0)); if(m<best){ best=m; k=i; } }
+      while(k>1&&k<items.length&&items[k-1].lab) k--;
+      const right=items.slice(k), lb=k<items.length&&!items[k].lab?labBefore(k):-1;
+      if(lb>=0) right.unshift({lab:items[lb].lab+' · 이어서',c:items[lb].c});
+      const y0=y; let yEnd=y0;
+      [items.slice(0,k),right].forEach((col,ci)=>{ P=30+ci*(CIN+GAP); y=y0; first=true; col.forEach(run); yEnd=Math.max(yEnd,y); });
+      P=30; IN=W-60; y=yEnd;
+      if(k<items.length) hr(P+CIN+GAP/2,y0+14,1,LN,yEnd-y0-14);
+    }
+    IN=W-60;
 
     /* 꼬리 */
     y+=10; hr(P,y,IN,NAVY,3); hr(P,y,96,SKY,3); y+=32;
@@ -2770,16 +2940,17 @@ function rosterImgRefresh(){
 }
 async function rosterImgBlob(){
   const d=rosterImgData(); if(!d){ showToast('명단이 비어 있어요','err'); return null; }
+  rosterHistRecord(cur().key);
   try{ if(document.fonts&&document.fonts.load) await document.fonts.load("700 18px 'Noto Sans KR'"); }catch(e){}
   await Promise.all([rosterLogo.mark,rosterLogo.text].map(i=>i.decode?i.decode().catch(()=>{}):null));
   const c=rosterCardCanvas(d);
   return new Promise(res=>c.toBlob(res,'image/png'));
 }
-function rosterImgName(){ const R=cur(); return R.work.date+'_'+(schShift()==='dawn'?'새벽반':'출근')+'명단.png'; }
+function rosterImgName(){ const R=cur(); return R.work.date+'_'+(schShift()==='dawn'?'새벽반':'출근')+'명단'+(getRosterCols()===2?'_2단':'')+'.png'; }
 function rosterImgZoom(){
   const d=rosterImgData(); if(!d) return;
   const c=rosterCardCanvas(d);
-  c.style.cssText='width:100%;max-width:600px;height:auto;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.6);display:block;margin:0 auto;';
+  c.style.cssText='width:100%;max-width:'+Math.round(c.width/3)+'px;height:auto;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.6);display:block;margin:0 auto;';
   const ov=document.createElement('div');
   ov.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);overflow:auto;padding:16px 12px 30px;';
   const tip=document.createElement('div');
@@ -2933,11 +3104,36 @@ function reloadTpl(){
 function selectDow(d){
   const R=cur();
   customRosterText = null; rosterSel = null; rosterNumsOpen = {};
+  rosterHistRecord();
   R.workDow=d;
-  R.work.title=R.tpl[d].title;
-  R.work.zones=deepZones(R.tpl[d].zones);
-  R.work.date=nearestDateForDow(d);
+  rosterSetWork(R,nearestDateForDow(d),d);
   render();
+}
+
+function rosterHistDates(){ const R=cur(); return Object.keys(rosterHist[R.key]).filter(d=>d!==R.work.date&&rosterHistGet(R.key,d)).sort().reverse(); }
+function openRosterHist(){ document.getElementById('rhist-sheet').classList.add('show'); drawRosterHist(); }
+function closeRosterHist(){ document.getElementById('rhist-sheet').classList.remove('show'); }
+function drawRosterHist(){
+  const R=cur(), box=document.getElementById('rh-list'); if(!box) return;
+  document.getElementById('rh-title').textContent='📂 지난 '+R.label+' 불러오기';
+  const y=new Date(R.work.date+'T00:00:00'); y.setDate(y.getDate()-1); const yIso=toLocalISO(y);
+  const wk=getWeekDays(R.work.date);
+  const rows=rosterHistDates().slice(0,30).map(d=>{
+    const h=rosterHistGet(R.key,d), zs=h.zones.filter(z=>!z.isDiv&&!z.isBackup&&z.name.trim()&&z.people.length);
+    const tag=d===yIso?'<span class="rh-tag">어제</span>':(wk.indexOf(d)>=0?'<span class="rh-tag wk">이번 주</span>':'');
+    return `<button class="rh-item" onclick="loadRosterHist('${d}')">
+      <div class="rh-top"><b>${fmtKDate(d)}</b>${tag}<span class="rh-cnt">구역 ${zs.length} · ${rosterUniqNames(zs).length}명</span></div>
+      <div class="rh-zones">${esc(zs.map(z=>z.name.trim()).join(' · '))}</div>
+    </button>`;
+  }).join('');
+  box.innerHTML=rows||`<div class="ob-empty">아직 남은 지난 명단이 없어요.<br>오늘부터 명단을 고치거나 보내면 날짜별로 쌓여요 (최근 ${ROSTER_HIST_DAYS}일).</div>`;
+}
+function loadRosterHist(d){
+  const R=cur(), h=rosterHistGet(R.key,d); if(!h) return;
+  customRosterText=null; rosterSel=null; rosterNumsOpen={};
+  R.work.title=h.title||R.defTitle; R.work.zones=deepZones(h.zones);
+  closeRosterHist(); render();
+  showToast('📂 '+fmtKDate(d)+' 명단을 불러왔어요 — 바뀐 사람만 고치세요');
 }
 
 function nearestDateForDow(targetDow){
@@ -3202,7 +3398,7 @@ function schBoardHTML(days, wide){
     }).join('');
     return `<tr><th class="bd-name" onclick="schOpenPerson('${esc(w)}')"><span style="color:${settleNameColorOf(w)}">${esc(w)}</span>${n?`<i>${n}</i>`:''}</th>${cells}</tr>`;
   }).join('');
-  const foot = days.map(d => { const c = schWorkCount(d, sh); return `<td class="${min>0&&c<min?'short':''}">${c}</td>`; }).join('');
+  const foot = days.map(d => { const c = schWorkCount(d, sh); return `<td class="${min>0&&c<min?'short':''} ${d===today?'today':''}">${c}</td>`; }).join('');
   return `
     <div class="bd-wrap ${wide?'wide':''}" id="bd-wrap"><table class="bd">
       <thead><tr><th class="bd-name bd-corner">${SHIFT_ICON[sh]} ${list.length}명</th>${head}</tr></thead>
@@ -3617,7 +3813,7 @@ function saveSettings(){
   showToast('⚙️ 설정 및 공유 양식이 기기에 저장되었습니다.');
 }
 
-const BK_KEYS=['disp-roster-tpl','disp-dawn-tpl','disp-schedule','disp-inbound','disp-roster-wide','disp-roster-compact','disp-roster-sep','disp-tab-order','acn5',
+const BK_KEYS=['disp-roster-tpl','disp-dawn-tpl','disp-schedule','disp-inbound','disp-roster-wide','disp-roster-compact','disp-roster-sep','disp-tab-order','acn5','disp-roster-hist',
                'mv_alias','mv_items','mv_base','mv_rules','mv_models','mv_midx','mv_history','mv_last','disp-settle'];
 let pendingImport=null;
 
@@ -3825,6 +4021,17 @@ if(!settleStore.closed||typeof settleStore.closed!=='object') settleStore.closed
 if(!settleStore.pinned||typeof settleStore.pinned!=='object') settleStore.pinned={};   /* 개인별 단가 고정 { 이름: true } */
 let settleUnlocked=false;   /* 단가 잠금 — 화면을 벗어나면 다시 잠김 */
 if(!settleStore.sent||typeof settleStore.sent!=='object') settleStore.sent={};   /* 정산서 보낸 표시 { '2026-09': { 이름: 시각 } } */
+/* 📋 월 합계 — 업체(오네·딜리)에서 받은 한 달 합산표를 기사별로 넣어 바로 정산 (2026-10-06 이사님 요청)
+   sums[월] = {on, qty:{이름:{칸:수량}}} · sumItems = 칸 이름(오네/딜리 따로). on 인 달은 매일 기록 대신 이걸로 계산.
+   단가·세금 방식은 기사별 설정(workers)을 그대로 씀 — 칸 이름이 단가 이름 */
+const SETTLE_SUM_DEFAULT={one:['당배 일반','당배 도서','당배 이형','트레 일반','트레 추가','애플'],
+  deli:['딜리 당일','딜리 반품','딜리 미배송·미회수','딜리 토요','딜리 일요','딜리 새벽','딜리 유닛반납','딜리 기타']};
+function settleSumEnsure(){
+  if(!settleStore.sums||typeof settleStore.sums!=='object') settleStore.sums={};
+  const S=settleStore.sumItems;
+  if(!S||!Array.isArray(S.one)||!Array.isArray(S.deli)) settleStore.sumItems=JSON.parse(JSON.stringify(SETTLE_SUM_DEFAULT));
+}
+settleSumEnsure();
 let settlePerson=null;      /* 대시보드에서 고른 기사 (개인 화면) */
 let settleQuery='';         /* 대시보드/단가 이름 검색 */
 let settleFilter='all';     /* all | noprice | pinned | sent | unsent */
@@ -3866,6 +4073,15 @@ function settleGroups(){
   return [ {key:'one',label:'오네 정산',items:items.filter(i=>!settleIsDeli(i))},
            {key:'deli',label:'딜리 정산',items:items.filter(settleIsDeli)} ];
 }
+function settleSumOn(m){ const x=settleStore.sums[m||settleStore.month]; return !!(x&&x.on); }
+/* 이 달 정산에 쓰는 묶음 — 월 합계인 달은 월 합계 칸, 아니면 물량 탭 물품 */
+function settleGroupsFor(m){
+  if(!settleSumOn(m)) return settleGroups();
+  const S=settleStore.sumItems;
+  return [ {key:'one',label:'오네 정산',items:S.one.slice()}, {key:'deli',label:'딜리 정산',items:S.deli.slice()} ];
+}
+function settleItemsFor(m){ return settleGroupsFor(m).reduce((a,g)=>a.concat(g.items),[]); }
+function settleSumLabel(it){ return String(it).replace(/^딜리\s*/,''); }
 function settleMonthLabel(m){ const a=String(m||'').split('-'); return a.length===2 ? a[0]+'년 '+parseInt(a[1],10)+'월' : m; }
 function settleDateLabel(d){ const x=new Date(d+'T00:00:00'); return isNaN(x) ? d : (x.getMonth()+1)+'/'+x.getDate()+'('+['일','월','화','수','목','금','토'][x.getDay()]+')'; }
 function won(n){ return (Math.round(n)||0).toLocaleString('ko-KR')+'원'; }
@@ -3875,6 +4091,7 @@ function settleAllNames(){
   const h=settleHistory(); const set={};
   Object.keys(h).forEach(d=>Object.keys((h[d]&&h[d].grid)||{}).forEach(n=>set[n]=1));
   Object.keys(settleStore.workers).forEach(n=>set[n]=1);
+  Object.keys(settleStore.sums||{}).forEach(m=>Object.keys((settleStore.sums[m]&&settleStore.sums[m].qty)||{}).forEach(n=>set[n]=1));
   return Object.keys(set).sort((a,b)=>a.localeCompare(b,'ko'));
 }
 
@@ -3895,7 +4112,7 @@ function settleCloseMonth(){
   const miss=c.rows.filter(r=>r.noPrice).length;
   const q=settleMonthLabel(m)+' 정산을 마감할까요?\n\n· 지금 단가·수량·지급액이 그대로 저장됩니다\n· 이후 단가를 바꿔도 이 달은 변하지 않습니다\n· 날짜별 내역 수정도 잠깁니다\n· 백업 파일도 같이 저장합니다'+(miss?'\n\n⚠ 단가가 비어 있는 기사가 '+miss+'명 있습니다. 그래도 마감할까요?':'');
   if(!confirm(q)) return;
-  settleStore.closed[m]={ at:Date.now(), dates:c.dates, rows:c.rows, totalSales:c.totalSales, totalPay:c.totalPay };
+  settleStore.closed[m]={ at:Date.now(), dates:c.dates, rows:c.rows, sum:!!c.sum, totalSales:c.totalSales, totalPay:c.totalPay };
   settleEditName=null; saveSettle(); render();
   exportBackupFile();   /* 마감한 날의 모든 자료를 파일로 — 폰을 잃어도 이 달 정산 근거가 남는다 */
   setTimeout(()=>showToast('🔏 '+settleMonthLabel(m)+' 마감 · 💾 백업 파일도 저장했어요'), 2600);
@@ -3907,9 +4124,19 @@ function settleReopenMonth(){
   delete settleStore.closed[m]; saveSettle(); showToast('🔓 마감을 해제했어요'); render();
 }
 function settleCalcLive(month){
-  const h=settleHistory(); const groups=settleGroups();
-  const dates=Object.keys(h).filter(d=>d.indexOf(month)===0).sort();
+  const sum=settleSumOn(month); const groups=settleGroupsFor(month);
+  const h=sum?{}:settleHistory();
+  const dates=sum?[]:Object.keys(h).filter(d=>d.indexOf(month)===0).sort();
   const qty={}, days={}, daily={};
+  if(sum){
+    const Q=settleStore.sums[month].qty||{};
+    Object.keys(Q).forEach(n=>{
+      const its=Object.keys(Q[n]||{}).filter(it=>Number(Q[n][it])>0);
+      if(!its.length) return;
+      qty[n]={}; days[n]=0; daily[n]=[];
+      its.forEach(it=>qty[n][it]=Number(Q[n][it]));
+    });
+  }
   dates.forEach(d=>{
     const g=(h[d]&&h[d].grid)||{};
     Object.keys(g).forEach(n=>{
@@ -3932,10 +4159,10 @@ function settleCalcLive(month){
     gs.forEach(x=>{ x.tax=settleTaxOf(x.sub,taxType); x.net=x.sub+x.tax; });
     const sales=gs.reduce((s,x)=>s+x.sub,0);
     const tax=gs.reduce((s,x)=>s+x.tax,0);
-    return {name:n,days:days[n],daily:daily[n],groups:gs,etc,sales,tax,taxType,pay:sales+tax,
+    return {name:n,days:days[n],daily:daily[n],sum,groups:gs,etc,sales,tax,taxType,pay:sales+tax,
             noPrice:gs.some(x=>x.lines.some(l=>l.noPrice)),totalQty:gs.reduce((s,x)=>s+x.qty,0)};
   });
-  return {dates,rows,totalSales:rows.reduce((s,r)=>s+r.sales,0),totalPay:rows.reduce((s,r)=>s+r.pay,0)};
+  return {dates,rows,sum,totalSales:rows.reduce((s,r)=>s+r.sales,0),totalPay:rows.reduce((s,r)=>s+r.pay,0)};
 }
 
 /* 기사 카드 열림 상태 유지 + 날짜별 내역 수정 */
@@ -3950,6 +4177,7 @@ function settleReload(){
   if(!settleStore.sent||typeof settleStore.sent!=='object') settleStore.sent={};
   if(!settleStore.month) settleStore.month=settleCurMonth();
   if(!settleStore.view) settleStore.view='table';
+  settleSumEnsure();
   settlePerson=null; settleEditName=null; settleUnlocked=false;
   settleQuery=''; settleFilter='all'; settleDayItem=''; settleOpenSet.clear();
 }
@@ -4021,7 +4249,7 @@ function settleMonth(delta){
   settleStore.month=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); saveSettle(); render();
 }
 function settleSetMonth(v){ if(/^\d{4}-\d{2}$/.test(v)){ settleStore.month=v; saveSettle(); render(); } }
-function settlePrice(name,item,v){ if(settleNeedUnlock()||settleStore.pinned[name]){ render(); return; } const w=settleWorker(name); const n=parseInt(String(v).replace(/[^\d]/g,''),10); if(n>0) w.prices[item]=n; else delete w.prices[item]; saveSettle(); if(settlePerson) render(); }
+function settlePrice(name,item,v){ if(settleNeedUnlock()||settleStore.pinned[name]){ render(); return; } const w=settleWorker(name); const t=String(v).trim(); const n=(parseInt(t.replace(/[^\d]/g,''),10)||0)*(/^[-−]/.test(t)?-1:1); if(n) w.prices[item]=n; else delete w.prices[item]; saveSettle(); if(settlePerson) render(); }
 function settleTax(name,v){ if(settleNeedUnlock()||settleStore.pinned[name]){ render(); return; } settleWorker(name).tax=TAX_TYPES[v]?v:'3.3'; saveSettle(); if(settlePerson) render(); }
 function settleAddWorker(){
   const el=document.getElementById('st-add'); const n=(el&&el.value||'').trim();
@@ -4039,12 +4267,13 @@ function settleResetMonth(){
   const m=settleStore.month, label=settleMonthLabel(m);
   const h=settleHistory(); const dates=Object.keys(h).filter(d=>d.indexOf(m)===0);
   const sent=Object.keys(settleStore.sent[m]||{}).length; const closed=settleIsClosed(m);
-  if(!dates.length&&!sent&&!closed){ showToast(label+'에는 지울 기록이 없어요'); return; }
-  if(!confirm(label+' 기록을 전부 지울까요?\n\n· 저장된 날짜 '+dates.length+'일\n· 보냄 표시 '+sent+'명'+(closed?'\n· 마감 상태':'')+'\n\n단가·세금·📌 고정은 그대로 남습니다.')) return;
+  const hasSum=!!settleStore.sums[m];
+  if(!dates.length&&!sent&&!closed&&!hasSum){ showToast(label+'에는 지울 기록이 없어요'); return; }
+  if(!confirm(label+' 기록을 전부 지울까요?\n\n· 저장된 날짜 '+dates.length+'일\n· 보냄 표시 '+sent+'명'+(closed?'\n· 마감 상태':'')+(hasSum?'\n· 📋 월 합계 표':'')+'\n\n단가·세금·📌 고정은 그대로 남습니다.')) return;
   const typed=prompt('정말 지우려면 아래에 "초기화" 라고 입력하세요');
   if(typed!=='초기화'){ showToast('취소했어요'); return; }
   dates.forEach(d=>delete h[d]); saveSettleHistory(h);
-  delete settleStore.sent[m]; delete settleStore.closed[m];
+  delete settleStore.sent[m]; delete settleStore.closed[m]; delete settleStore.sums[m];
   settlePerson=null; settleEditName=null; saveSettle();
   showToast('🧹 '+label+' 기록을 지웠어요'); render();
 }
@@ -4074,7 +4303,7 @@ function settlePersonText(r){
   r.groups.filter(g=>g.lines.length).forEach(g=>L.push((g.key==='one'?'🟦 ':'🟩 ')+settleNetLabel(g)+' '+won(g.sub+settleGroupTax(g,r.taxType))));
   L.push('💰 총 지급액 '+won(r.pay));
   L.push('(매출 '+won(r.sales)+(r.taxType!=='none'?' · '+settleTaxLabel(r.taxType)+' '+(r.tax>0?'+':'')+won(r.tax):'')+')');
-  L.push('근무 '+r.days+'일 · 총 '+num(r.totalQty)+'건');
+  L.push((r.sum?'월 합계':'근무 '+r.days+'일')+' · 총 '+num(r.totalQty)+'건');
   if(r.daily&&r.daily.length){
     L.push(SETTLE_BAR);
     L.push('📅 날짜별 내역');
@@ -4112,7 +4341,7 @@ function settleCardPNG(r){
   T('총 지급액',W-P,42,{s:12,w:700,c:'rgba(255,255,255,.8)',a:'right'});
   T(won(r.pay),W-P,78,{s:28,w:900,c:'#fff',a:'right'});
   let y=136;
-  T('근무 '+r.days+'일 · 총 '+num(r.totalQty)+'건 · '+TAX_TYPES[r.taxType],P,y,{s:13,w:500,c:'#6b7280'}); y+=26;
+  T((r.sum?'월 합계':'근무 '+r.days+'일')+' · 총 '+num(r.totalQty)+'건 · '+TAX_TYPES[r.taxType],P,y,{s:13,w:500,c:'#6b7280'}); y+=26;
   r.groups.forEach(gr=>{
     if(!gr.lines.length) return;
     const one=gr.key==='one';
@@ -4181,13 +4410,13 @@ async function settleShareImage(name){
 }
 /* 엑셀 붙여넣기용 표 (탭 구분) */
 function settleTSV(){
-  const c=settleCalc(settleStore.month); const groups=settleGroups();
+  const c=settleCalc(settleStore.month); const groups=settleGroupsFor(settleStore.month);
   const head=['이름','근무일'];
   groups.forEach(g=>g.items.forEach(it=>head.push(it+' 수량',it+' 단가',it+' 금액')));
   head.push('오네 소계','오네 공제','오네 지급액','딜리 소계','딜리 공제','딜리 지급액','매출 합계','세금 방식','세금 합계','총 지급액');
   const rows=[head.join('\t')];
   c.rows.forEach(r=>{
-    const a=[r.name,r.days];
+    const a=[r.name,r.sum?'월합계':r.days];
     groups.forEach((g,gi)=>g.items.forEach(it=>{ const l=r.groups[gi].lines.find(x=>x.item===it)||{qty:0,price:0,amt:0}; a.push(l.qty,l.price,l.amt); }));
     const t0=settleGroupTax(r.groups[0],r.taxType), t1=settleGroupTax(r.groups[1],r.taxType);
     a.push(r.groups[0].sub, t0, r.groups[0].sub+t0, r.groups[1].sub, t1, r.groups[1].sub+t1, r.sales, TAX_TYPES[r.taxType], r.tax, r.pay);
@@ -4214,13 +4443,13 @@ async function settleDownloadCSV(text, fname){
 }
 /* 정산 내역 (이름 × 물품 수량·단가·금액 → 지급액) */
 function settleSheetRows(){
-  const c=settleCalc(settleStore.month); const groups=settleGroups();
+  const c=settleCalc(settleStore.month); const groups=settleGroupsFor(settleStore.month);
   const head=['이름','근무일'];
   groups.forEach(g=>g.items.forEach(it=>head.push(it+' 수량',it+' 단가',it+' 금액')));
   head.push('오네 소계','오네 공제','오네 지급액','딜리 소계','딜리 공제','딜리 지급액','매출 합계','세금 방식','세금 합계','총 지급액');
   const rows=[head];
   c.rows.forEach(r=>{
-    const a=[r.name,r.days];
+    const a=[r.name,r.sum?'월합계':r.days];
     groups.forEach((g,gi)=>g.items.forEach(it=>{ const l=r.groups[gi].lines.find(x=>x.item===it)||{qty:0,price:0,amt:0}; a.push(l.qty,l.price,l.amt); }));
     const t0=settleGroupTax(r.groups[0],r.taxType), t1=settleGroupTax(r.groups[1],r.taxType);
     a.push(r.groups[0].sub, t0, r.groups[0].sub+t0, r.groups[1].sub, t1, r.groups[1].sub+t1, r.sales, TAX_TYPES[r.taxType], r.tax, r.pay);
@@ -4272,6 +4501,7 @@ function renderSettle(){
       <button class="set-tab ${v==='table'?'active':''}" onclick="settleView('table')">📊 정산표</button>
       <button class="set-tab ${v==='price'?'active':''}" onclick="settleView('price')">💵 단가</button>
       <button class="set-tab ${v==='days'?'active':''}" onclick="settleView('days')">📅 기록</button>
+      <button class="set-tab ${v==='sum'?'active':''}" onclick="settleView('sum')">📋 월 합계</button>
     </div>
     <div class="st-month">
       <button class="st-nav" onclick="settleMonth(-1)">‹</button>
@@ -4282,6 +4512,7 @@ function renderSettle(){
   if(settlePerson) body=renderSettlePerson(settlePerson);
   else if(v==='price') body=renderSettlePrices();
   else if(v==='days') body=renderSettleDays();
+  else if(v==='sum') body=renderSettleSum();
   else body=renderSettleTable();
   return head+body+'<div style="height:20px"></div>';
 }
@@ -4319,7 +4550,7 @@ function settleDashListHTML(){
       <div class="st-tile-head"><span class="st-tile-name" style="color:${settleNameColorOf(r.name)}">${esc(r.name)}</span>
         <span class="st-tile-marks">${settleStore.pinned[r.name]?'<span>📌</span>':''}${sentMap[r.name]?'<span class="ok">✓</span>':''}${r.noPrice?'<span class="w">⚠</span>':''}</span></div>
       <div class="st-tile-val ${r.noPrice?'no':''}">${r.noPrice?'단가 없음':won(r.pay)}</div>
-      <div class="st-tile-sub">${r.days}일 · ${num(r.totalQty)}건</div>
+      <div class="st-tile-sub">${r.sum?'월 합계':r.days+'일'} · ${num(r.totalQty)}건</div>
     </button>`).join('');
   return `
     <div class="section-head"><div class="section-title">👥 기사 <b>${rows.length}</b>명 · 이름을 누르면 정산서와 단가</div></div>
@@ -4327,6 +4558,9 @@ function settleDashListHTML(){
 }
 function renderSettleTable(){
   const c=settleCalc(settleStore.month);
+  if(!c.rows.length&&settleSumOn()) return `
+    <div class="st-empty"><b>${esc(settleMonthLabel(settleStore.month))}</b>은 <b>📋 월 합계</b>로 정산하는 달인데 아직 숫자가 없습니다.<br>
+    <b>📋 월 합계</b> 탭에서 기사별 합계를 넣거나 엑셀에서 붙여넣으세요.</div>`;
   if(!c.rows.length) return `
     <div class="st-empty"><b>${esc(settleMonthLabel(settleStore.month))}</b>에 저장된 물량이 없습니다.<br>
     📦 물량 탭에서 숫자 확인 뒤 <b>💰 정산에 저장</b>을 누르면 여기에 쌓입니다.</div>`;
@@ -4339,7 +4573,7 @@ function renderSettleTable(){
   return `
     ${settleCloseBar(c)}
     <div class="st-sum">
-      <div><small>기록 · 기사</small><b>${c.dates.length}일 · ${c.rows.length}명</b></div>
+      <div><small>${c.sum?'📋 월 합계 · 기사':'기록 · 기사'}</small><b>${c.sum?c.rows.length+'명':c.dates.length+'일 · '+c.rows.length+'명'}</b></div>
       <div><small>물량 합계</small><b>${num(c.rows.reduce((s,r)=>s+r.totalQty,0))}건</b></div>
       <div><small>매출 합계</small><b>${won(c.totalSales)}</b></div>
       <div><small>지급 합계</small><b class="pay">${won(c.totalPay)}</b></div>
@@ -4353,6 +4587,285 @@ function renderSettleTable(){
       <button class="btn btn-copy" onclick="settleCopyAll()">📋 정산 내역 표 복사</button>
     </div>
     ${settleResetBtn()}`;
+}
+/* ── 📋 월 합계 화면 ── */
+let settleSumGrp='one';          /* 붙여넣기에서 고른 업체 */
+let settleSumPasteOpen=false;
+let settleSumNames=[], settleSumCols=[];   /* 표 칸 번호 → 이름·칸 (입력 칸 onchange 용) */
+let settleSumReport=null;        /* 마지막 붙여넣기·파일 넣기 결과 {results, notes} — 확인 누를 때까지 남김 */
+function renderSettleSum(){
+  const m=settleStore.month, on=settleSumOn(m), closed=settleIsClosed(m);
+  const modeBar=`<div class="st-summode">
+      <div class="st-summode-q">${esc(settleMonthLabel(m))} 정산 수량을 어디서 가져올까요?</div>
+      <div class="st-summode-btns">
+        <button class="${on?'':'on'}" onclick="settleSumMode(false)">📦 매일 기록<small>물량 탭에서 저장한 것</small></button>
+        <button class="${on?'on':''}" onclick="settleSumMode(true)">📋 월 합계<small>업체 합산표를 기사별로</small></button>
+      </div></div>`;
+  if(!on) return modeBar+`<div class="st-empty">지금 <b>${esc(settleMonthLabel(m))}</b>은 <b>매일 기록</b>으로 정산합니다.<br>업체에서 받은 한 달 합산표로 정산하려면 위에서 <b>📋 월 합계</b>를 고르세요.<br><small>매일 기록은 지워지지 않고 그대로 남아요.</small></div>`;
+  const S=settleStore.sumItems, Q=settleStore.sums[m].qty||{};
+  const names=settleAllNames(), all=S.one.concat(S.deli);
+  settleSumNames=names; settleSumCols=all;
+  const cell=(n,it)=>Number((Q[n]||{})[it])||0;
+  const rowTot=n=>all.reduce((a,it)=>a+cell(n,it),0);
+  const colTot=it=>names.reduce((a,n)=>a+cell(n,it),0);
+  const grpTot=k=>S[k].reduce((a,it)=>a+colTot(it),0);
+  const groups=[['one','오네',S.one],['deli','딜리',S.deli]];
+  const ro=closed?'disabled':'';
+  const badNames=new Set(settleSumChecks(m).map(b=>b.n));
+  const table=`<div class="st-mxwrap"><table class="st-mx st-summx">
+      <thead><tr><th class="cn" rowspan="2">이름</th>${groups.map(([k,l,its])=>its.length?`<th colspan="${its.length}" class="g-${k}">${l}</th>`:'').join('')}<th class="tot" rowspan="2">합계</th></tr>
+        <tr>${groups.map(([k,l,its])=>its.map(it=>`<th class="g-${k}">${esc(settleSumLabel(it))}</th>`).join('')).join('')}</tr></thead>
+      <tbody>${names.map((n,ri)=>`<tr><td class="cn">${esc(n)}</td>${all.map((it,ci)=>`<td><input type="number" inputmode="numeric" class="st-cell" ${ro} value="${cell(n,it)||''}" placeholder="·" onchange="settleSumSet(${ri},${ci},this.value)"></td>`).join('')}<td class="tot${badNames.has(n)?' bad':''}" id="sumr-${ri}">${num(rowTot(n))}</td></tr>`).join('')}</tbody>
+      <tfoot><tr><td class="cn">합계</td>${all.map((it,ci)=>`<td id="sumc-${ci}">${num(colTot(it))}</td>`).join('')}<td class="tot" id="sumall">${num(names.reduce((a,n)=>a+rowTot(n),0))}</td></tr></tfoot>
+    </table></div>`;
+  const paste=closed?'':`<details class="paste-box" style="margin:0 0 12px" ${settleSumPasteOpen?'open':''} ontoggle="settleSumPasteOpen=this.open">
+      <summary>📥 엑셀에서 붙여넣기 (업체 합산표)</summary>
+      <div class="paste-inner">
+        <div class="paste-mode" style="margin-bottom:8px">${[['one','🟦 오네 합산표'],['deli','🟩 딜리 합산표']].map(([k,l])=>`<button class="paste-mode-btn ${settleSumGrp===k?'active':''}" onclick="settleSumGrp='${k}';settleSumPasteOpen=true;render()">${l}</button>`).join('')}</div>
+        <button class="st-sumfile" onclick="settleSumFilePick()">📂 엑셀 파일 통째로 고르기 <small style="display:block;font-weight:600;color:var(--sub);font-size:11px;margin-top:2px">오네·딜리 합산 시트를 알아서 찾아 한 번에 넣어요</small></button>
+        <input type="file" id="st-sum-file" accept=".xlsx,.xls" style="display:none" onchange="settleSumFile(this)">
+        <div class="paste-hint">또는 엑셀에서 <b>칸 이름 줄부터 숫자 칸까지</b> 긁어 복사해 붙여넣으세요. 칸 이름(당일·반품…)을 보고 맞추고, 칸 이름이 없으면 이 순서로 읽어요:<br><b>${S[settleSumGrp].map(it=>esc(settleSumLabel(it))).join(' · ')}</b><br>종합·합계 칸은 앱 합계와 맞는지 비교만 해요. 이름 뒤 <code>_N</code> 은 떼고 읽어요.</div>
+        <textarea class="paste-ta" id="st-sum-paste" placeholder="홍길동&#9;102&#9;0&#9;0&#9;0&#9;27"></textarea>
+        <div class="paste-btns"><button class="mini-btn" style="border-color:#155244;color:var(--teal3)" onclick="settleSumPaste()">↩️ 반영하기</button></div>
+      </div></details>`;
+  return modeBar
+    + (closed?`<div class="st-warn" style="margin:0 0 12px">🔏 <b>${esc(settleMonthLabel(m))}</b>은 마감됐습니다. 마감 해제 전에는 고칠 수 없어요.</div>`:'')
+    + `<div class="st-sum">
+        <div><small>숫자 넣은 기사</small><b>${names.filter(n=>rowTot(n)).length}명</b></div>
+        <div><small>전체 합계</small><b>${num(grpTot('one')+grpTot('deli'))}건</b></div>
+        <div><small>🟦 오네</small><b>${num(grpTot('one'))}건</b></div>
+        <div><small>🟩 딜리</small><b>${num(grpTot('deli'))}건</b></div>
+      </div>`
+    + paste + settleSumReportHTML() + `<div id="sum-check">${settleSumCheckHTML(settleSumChecks(m))}</div>` + table
+    + `<p class="st-mxhint">표를 옆으로 밀면 나머지 칸이 보입니다. 숫자를 넣으면 바로 저장되고 📊 정산표·정산서에 반영돼요. 칸 이름은 💵 단가 탭에서 바꿀 수 있어요.</p>`
+    + (closed?'':`<div class="dispatch-row" style="grid-template-columns:1fr 78px;margin-top:12px">
+        <input type="text" id="st-sum-add" class="inp" placeholder="표에 이름 추가" onkeydown="if(event.key==='Enter')settleSumAddName()">
+        <button class="set-tab" style="height:46px" onclick="settleSumAddName()">추가</button></div>`)
+    + `<div class="actions" style="margin-top:12px">
+        <button class="btn btn-copy" onclick="settleView('table')">📊 정산표 보기</button>
+        <button class="btn btn-copy" onclick="settleSumCopy()">📋 표 복사</button></div>`;
+}
+function settleSumMode(on){
+  const m=settleStore.month;
+  if(settleIsClosed(m)){ showToast('🔏 마감된 달은 바꿀 수 없어요','err'); return; }
+  if(on===settleSumOn(m)) return;
+  if(on){ settleStore.sums[m]=settleStore.sums[m]||{qty:{}}; settleStore.sums[m].on=true; }
+  else{
+    if(!confirm('이 달을 매일 기록(물량 탭)으로 정산할까요?\n월 합계 표에 넣은 숫자는 지워지지 않고 남아 있어요.')) return;
+    settleStore.sums[m].on=false;
+  }
+  saveSettle(); render();
+  showToast(on?'📋 '+settleMonthLabel(m)+'은 월 합계로 정산합니다':'📦 '+settleMonthLabel(m)+'은 매일 기록으로 정산합니다');
+}
+function settleSumSet(ri,ci,v){
+  const m=settleStore.month; if(settleIsClosed(m)||!settleSumOn(m)) return;
+  const n=settleSumNames[ri], it=settleSumCols[ci]; if(!n||!it) return;
+  const Q=settleStore.sums[m].qty=settleStore.sums[m].qty||{};
+  const q=parseInt(String(v).replace(/[^\d]/g,''),10)||0;
+  Q[n]=Q[n]||{}; if(q>0) Q[n][it]=q; else delete Q[n][it];
+  if(!Object.keys(Q[n]).length) delete Q[n];
+  saveSettle();
+  /* 화면 전체를 다시 그리지 않고 합계 칸만 — 표 스크롤·입력 위치가 그대로 */
+  const c=(x,y)=>Number((Q[x]||{})[y])||0;
+  const set=(id,t)=>{ const e=document.getElementById(id); if(e) e.textContent=t; };
+  set('sumr-'+ri, num(settleSumCols.reduce((a,y)=>a+c(n,y),0)));
+  set('sumc-'+ci, num(settleSumNames.reduce((a,x)=>a+c(x,it),0)));
+  set('sumall', num(settleSumNames.reduce((a,x)=>a+settleSumCols.reduce((b,y)=>b+c(x,y),0),0)));
+  const bad=settleSumChecks(m), badN=new Set(bad.map(b=>b.n));
+  const rc=document.getElementById('sumr-'+ri); if(rc) rc.classList.toggle('bad', badN.has(n));
+  const box=document.getElementById('sum-check'); if(box) box.innerHTML=settleSumCheckHTML(bad);
+}
+/* 업체 합산표 읽기 — 붙여넣기와 파일 넣기가 같이 씀 (2026-10-06)
+   · 칸 이름 줄이 있으면 칸 이름으로 맞춤: 두 줄 머리(당배 / 일반·도서·이형)는 위 칸 이름을 오른쪽으로 이어 붙여 "당배 일반"
+   · 칸 이름이 하나도 안 맞으면(칸 이름 줄이 없으면) 예전처럼 칸 순서대로, 순서 다음 숫자 하나 더 있으면 그건 종합
+   · 종합·합계 칸은 넣지 않고 앱 합계와 비교만 (check) — 다르면 빨간 표시 */
+const SETTLE_TOTAL_HEAD=/^(종합|합계|총계|소계|총합|총|계|total)$/i;
+function settleNormHead(t){ return String(t||'').replace(/\([^)]*\)|（[^）]*）/g,'').replace(/[\s·,.\-_/]/g,'').replace(/^딜리/,'').replace(/배송$/,'').toLowerCase(); }
+function settleSumParseTable(text,grp){
+  const its=settleStore.sumItems[grp];
+  const clean=c=>String(c==null?'':c).replace(/[,\s원건]/g,'');
+  const isNum=c=>/^-?\d+$/.test(clean(c));
+  const toNum=c=>isNum(c)?parseInt(clean(c),10):NaN;
+  const first=cells=>{ let i=0; while(i<cells.length&&!String(cells[i]).trim()) i++; return i; };
+  const isData=cells=>{ const i=first(cells), n=String(cells[i]||'').trim(); return !!n&&!isNum(n)&&cells.slice(i+1).some(isNum); };
+  const all=String(text||'').split(/\r?\n/).filter(l=>l.trim()).map(l=>l.indexOf('\t')>=0?l.split('\t'):l.trim().split(/\s+/));
+  const head=[], data=[];
+  all.forEach(cells=>{ if(isData(cells)) data.push(cells); else if(!data.length) head.push(cells); });
+  const nameCol=data.length?first(data[0]):0;
+  const width=Math.max(0,...all.map(c=>c.length));
+  const labels=[];
+  for(let c=0;c<width;c++){
+    const parts=[];
+    head.forEach((h,hi)=>{
+      let v=String(h[c]||'').trim();
+      if(!v&&head.slice(hi+1).some(x=>String(x[c]||'').trim())){ for(let k=c-1;k>nameCol;k--){ const t=String(h[k]||'').trim(); if(t){ v=t; break; } } }
+      if(v) parts.push(v);
+    });
+    labels[c]=parts.join(' ');
+  }
+  const norm=labels.map(settleNormHead);
+  let totalCol=-1; const colOf={}, used=new Set();
+  if(head.length){
+    norm.forEach((h,c)=>{ if(c>nameCol&&totalCol<0&&SETTLE_TOTAL_HEAD.test(h)) totalCol=c; });
+    const free=c=>c>nameCol&&!used.has(c)&&c!==totalCol&&norm[c];
+    its.forEach(it=>{ const k=settleNormHead(it); const c=norm.findIndex((h,ci)=>free(ci)&&h===k); if(c>=0){ colOf[it]=c; used.add(c); } });
+    its.forEach(it=>{ if(it in colOf) return; const k=settleNormHead(it); if(k.length<2) return;
+      const c=norm.findIndex((h,ci)=>free(ci)&&h.length>=2&&(h.indexOf(k)>=0||k.indexOf(h)>=0)); if(c>=0){ colOf[it]=c; used.add(c); } });
+  }
+  const byHead=Object.keys(colOf).length>0;   /* 칸 이름이 하나라도 맞으면 이름으로 — 모르는 칸이 순서로 엉뚱한 칸에 들어가지 않게 */
+  const missing=byHead?its.filter(it=>!(it in colOf)):[];
+  const extra=byHead?labels.filter((l,c)=>c>nameCol&&l&&!used.has(c)&&c!==totalCol):[];
+  const rows=[];
+  data.forEach(cells=>{
+    const i=first(cells);
+    const name=String(cells[i]||'').trim().replace(/_[A-Za-z0-9]+$/,'').replace(/\s+/g,'');
+    if(!name||SETTLE_TOTAL_HEAD.test(name)) return;
+    const vals={};
+    its.forEach((it,k)=>{ const c=byHead?colOf[it]:i+1+k; if(c==null) return; const q=toNum(cells[c]); vals[it]=q>0?q:0; });
+    const tc=byHead?totalCol:i+1+its.length;
+    const t=tc>=0?toNum(cells[tc]):NaN;
+    rows.push({name,vals,total:isNaN(t)?null:t});
+  });
+  return {rows,byHead,missing,extra,matched:Object.keys(colOf).length};
+}
+function settleSumApply(grp,P){
+  const m=settleStore.month, S=settleStore.sums[m];
+  const Q=S.qty=S.qty||{}; S.check=S.check||{};
+  const known=new Set(settleAllNames()); const done=[], added=[];
+  P.rows.forEach(r=>{
+    const n=r.name; Q[n]=Q[n]||{};
+    Object.keys(r.vals).forEach(it=>{ if(r.vals[it]>0) Q[n][it]=r.vals[it]; else delete Q[n][it]; });
+    if(!Object.keys(Q[n]).length) delete Q[n];
+    S.check[n]=S.check[n]||{};
+    if(r.total!=null) S.check[n][grp]=r.total; else delete S.check[n][grp];
+    if(!Object.keys(S.check[n]).length) delete S.check[n];
+    done.push(n); if(!known.has(n)){ added.push(n); known.add(n); }
+  });
+  added.forEach(n=>settleWorker(n));
+  return {grp,done,added,missing:P.missing,extra:P.extra,byHead:P.byHead};
+}
+/* 업체 표의 종합과 앱이 더한 합계가 다른 기사 */
+function settleSumChecks(m){
+  const S=settleStore.sums[m]; if(!S||!S.check) return [];
+  const Q=S.qty||{}, I=settleStore.sumItems, out=[];
+  Object.keys(S.check).forEach(n=>['one','deli'].forEach(g=>{
+    const t=S.check[n][g]; if(t==null) return;
+    const a=I[g].reduce((x,it)=>x+(Number((Q[n]||{})[it])||0),0);
+    if(a!==t) out.push({n,g,t,a});
+  }));
+  return out;
+}
+function settleSumCheckHTML(bad){
+  const S=settleStore.sums[settleStore.month]; const cnt=S&&S.check?Object.keys(S.check).length:0;
+  if(!bad.length) return cnt?`<div class="st-sumok">✅ 업체 표의 <b>종합</b>과 앱 합계가 모두 맞아요 (${cnt}명 비교)</div>`:'';
+  return `<div class="st-warn" style="margin:0 0 12px">⚠️ 업체 표의 <b>종합</b>과 앱 합계가 다른 기사 <b>${bad.length}</b>명 — 칸이 밀렸거나 빠진 숫자가 없는지 확인해 주세요. 표에서 빨간 합계 칸이에요.<br>${bad.map(b=>`<b>${esc(b.n)}</b> ${b.g==='one'?'오네':'딜리'}: 업체 ${num(b.t)} · 앱 ${num(b.a)}`).join('<br>')}</div>`;
+}
+function settleSumReportHTML(){
+  const R=settleSumReport; if(!R) return '';
+  const L=s=>s==='one'?'🟦 오네':'🟩 딜리';
+  const lines=R.results.map(r=>`<b class="h">${r.sheet?'"'+esc(r.sheet)+'" 시트 → ':''}${L(r.grp)} — ${r.done.length}명 반영 <span style="font-weight:600;color:var(--sub)">(${r.how?r.how+' · ':''}${r.byHead?'칸 이름으로 맞춤':'칸 순서대로 읽음'})</span></b>`
+    + (r.added.length?`<div class="w">• 처음 보는 이름 ${r.added.length}명: ${r.added.map(esc).join(', ')} — 오타가 아닌지 확인</div>`:'')
+    + (r.missing.length?`<div class="w">• 표에서 못 찾은 칸: ${r.missing.map(x=>esc(settleSumLabel(x))).join(', ')} — 이 칸 숫자는 그대로 뒀어요</div>`:'')
+    + (r.extra.length?`<div class="w">• 앱에 없는 칸: ${r.extra.map(esc).join(', ')} — 숫자를 넣지 않았어요 (필요하면 💵 단가 탭에서 칸 추가)</div>`:'')).join('');
+  const notes=R.notes.map(n=>`<div class="w">• ${esc(n)}</div>`).join('');
+  return `<div class="st-sumrep">${lines}${notes}${!lines&&!notes?'읽은 내용이 없어요.':''}<button onclick="settleSumReport=null;render()">확인했어요</button></div>`;
+}
+/* 붙여넣기 */
+function settleSumPaste(){
+  const m=settleStore.month; if(settleIsClosed(m)) return;
+  const ta=document.getElementById('st-sum-paste'); const text=ta?ta.value:'';
+  if(!text.trim()){ showToast('붙여넣은 내용이 없어요','err'); return; }
+  const P=settleSumParseTable(text,settleSumGrp);
+  if(!P.rows.length){ showToast('읽은 줄이 없어요 — 이름과 숫자가 같이 있는지 확인해 주세요','err'); return; }
+  const r=settleSumApply(settleSumGrp,P);
+  saveSettle(); settleSumReport={results:[r],notes:[]}; settleSumPasteOpen=false; render();
+  showToast('✅ '+(r.grp==='one'?'오네':'딜리')+' '+r.done.length+'명 반영');
+}
+/* 엑셀 파일 통째로 — 시트 이름에 오네/딜리가 있는 합산 시트를 찾고, 일자별·내역 시트는 건너뜀 */
+/* 시트 하나가 무엇인지 — 시트 이름이 Sheet1·Sheet2 여도 안의 칸 이름으로 판단 (2026-10-06 사용자 요청)
+   · 운송장·주소·주문번호·박스 이름 같은 칸이 있거나 이름에 일자별·내역이 있으면 원본 → 건너뜀
+   · 칸 이름이 오네 칸(당배·트레·애플…)과 더 많이 맞으면 오네, 딜리 칸(당일·반품·토요·일요…)과 더 많이 맞으면 딜리
+   · 칸 이름으로 못 가르면 시트 이름(오네·딜리)으로, 그래도 모르면 모름 */
+const SETTLE_RAW_HEAD=/운송장|송장번호|주문번호|주소|전화번호|박스\s*이름|박스명/;
+function settleSheetKind(sh){
+  if(!String(sh.text||'').trim()) return {empty:true,hinted:/오네|딜리|합산/.test(sh.name)};
+  const top=sh.text.split(/\r?\n/).slice(0,6).join(' ');
+  if(/일자별|내역|원본|상세/.test(sh.name)||SETTLE_RAW_HEAD.test(top)) return {raw:true};
+  const so=settleSumParseTable(sh.text,'one').matched, sd=settleSumParseTable(sh.text,'deli').matched;
+  if(so>sd) return {grp:'one',how:'칸 이름 보고 판단'};
+  if(sd>so) return {grp:'deli',how:'칸 이름 보고 판단'};
+  const byName=/딜리/.test(sh.name)?'deli':/오네|cj|씨제이/i.test(sh.name)?'one':null;
+  if(byName) return {grp:byName,how:'시트 이름 보고 판단'};
+  return {};
+}
+function settleSumFilePick(){ const el=document.getElementById('st-sum-file'); if(el){ el.value=''; el.click(); } }
+async function settleSumFile(inp){
+  const f=inp&&inp.files&&inp.files[0]; if(!f) return;
+  const m=settleStore.month; if(settleIsClosed(m)||!settleSumOn(m)) return;
+  try{
+    showToast('📂 '+f.name+' 읽는 중…');
+    const X=await settleLoadXLSX();
+    const wb=X.read(await f.arrayBuffer(),{type:'array'});
+    const sheets=wb.SheetNames.map(n=>({name:n,text:X.utils.sheet_to_csv(wb.Sheets[n],{FS:'\t',blankrows:false})}));
+    const pick=sheets.map(sh=>Object.assign({sh},settleSheetKind(sh)));
+    const notes=[];
+    pick.filter(x=>x.raw).forEach(x=>notes.push('"'+x.sh.name+'" 시트는 택배 하나하나 적힌 원본이라 건너뛰었어요'));
+    pick.filter(x=>x.empty&&x.hinted).forEach(x=>notes.push('"'+x.sh.name+'" 시트에 칸 숫자가 없어요 — 표를 그림(사진)으로 붙여 둔 것 같아요. 칸에 숫자를 넣은 표로 바꿔 주세요'));
+    let targets=pick.filter(x=>x.grp);
+    const unknown=pick.filter(x=>!x.raw&&!x.grp&&!x.empty);
+    /* 시트가 하나뿐이고 칸 이름도 없으면 붙여넣기에서 골라 둔 업체로 */
+    if(!targets.length&&unknown.length===1){ unknown[0].grp=settleSumGrp; unknown[0].how='고른 업체로'; targets=unknown.splice(0,1); }
+    unknown.forEach(x=>notes.push('"'+x.sh.name+'" 시트는 칸 이름이 없어 오네인지 딜리인지 몰라 건너뛰었어요 — 이 시트만 복사해서 붙여넣어 주세요'));
+    const results=[];
+    targets.forEach(x=>{
+      const P=settleSumParseTable(x.sh.text,x.grp);
+      if(!P.rows.length){ notes.push('"'+x.sh.name+'" 시트에서 기사 숫자를 못 찾았어요 — 칸에 숫자가 아니라 그림(사진)이 붙어 있을 수 있어요'); return; }
+      results.push(Object.assign(settleSumApply(x.grp,P),{sheet:x.sh.name,how:x.how}));
+    });
+    saveSettle(); settleSumReport={results,notes}; settleSumPasteOpen=false; render();
+    showToast(results.length?'✅ '+results.map(r=>(r.grp==='one'?'오네':'딜리')+' '+r.done.length+'명').join(' · ')+' 반영':'넣은 숫자가 없어요 — 아래 안내를 확인해 주세요', results.length?undefined:'err');
+  }catch(e){ showToast((e&&e.message)||'파일을 읽지 못했어요','err'); }
+}
+function settleSumAddName(){
+  const el=document.getElementById('st-sum-add'); const n=(el&&el.value||'').trim().replace(/\s+/g,'');
+  if(!n){ showToast('이름을 넣어주세요','err'); return; }
+  settleWorker(n); saveSettle(); render(); showToast('➕ '+n+' 추가');
+}
+function settleSumCopy(){
+  const m=settleStore.month; if(!settleSumOn(m)) return;
+  const S=settleStore.sumItems, Q=settleStore.sums[m].qty||{}, all=S.one.concat(S.deli);
+  const rows=[['이름',...all.map(settleSumLabel),'합계'].join('\t')];
+  settleAllNames().forEach(n=>{ const v=all.map(it=>Number((Q[n]||{})[it])||0); const t=v.reduce((a,b)=>a+b,0); if(t) rows.push([n,...v,t].join('\t')); });
+  copyText(rows.join('\n'));
+}
+/* 단가 탭 — 월 합계인 달은 월 합계 칸 이름을 고침 */
+function settleSumItemsHTML(locked){
+  const S=settleStore.sumItems;
+  const grp=(k,l)=>`<div class="st-sumitems"><div class="st-sumitems-h">${l}</div><div class="chips">${S[k].map((it,i)=>`<span class="chip">${esc(settleSumLabel(it))}${locked?'':`<button class="chip-x" onclick="settleSumDelItem('${k}',${i})" aria-label="${esc(settleSumLabel(it))} 빼기">×</button>`}</span>`).join('')}${locked||S[k].length>=10?'':`<span class="chip-add"><input type="text" id="st-sumitem-${k}" placeholder="칸 추가" maxlength="12" onkeydown="if(event.key==='Enter')settleSumAddItem('${k}')"><button class="chip-plus" onclick="settleSumAddItem('${k}')" aria-label="칸 추가">＋</button></span>`}</div></div>`;
+  return `
+    <details class="st-items" ${locked?'':'open'}>
+      <summary><span>📋 월 합계 칸 <b>${S.one.length+S.deli.length}</b></span><span>오네 ${S.one.length} · 딜리 ${S.deli.length} ▾</span></summary>
+      <div class="st-items-body">
+        ${settleLockBar(locked)}
+        ${grp('one','🟦 오네')}${grp('deli','🟩 딜리')}
+        <p style="font-size:11.5px;color:var(--dim);margin:6px 2px 4px;line-height:1.6">이 달은 📋 월 합계로 정산해서 이 칸마다 단가를 넣습니다. 칸을 빼도 넣어 둔 숫자·단가는 남아요.</p>
+      </div>
+    </details>`;
+}
+function settleSumAddItem(k){
+  if(settleNeedUnlock()) return;
+  const el=document.getElementById('st-sumitem-'+k); let v=(el&&el.value||'').trim();
+  if(!v){ showToast('칸 이름을 넣어주세요','err'); return; }
+  if(k==='deli'&&!/^딜리/.test(v)) v='딜리 '+v;   /* 오네 칸과 단가 이름이 겹치지 않게 */
+  const S=settleStore.sumItems;
+  if(S.one.concat(S.deli).indexOf(v)>=0){ showToast('이미 있는 칸이에요','err'); return; }
+  S[k].push(v); saveSettle(); render();
+}
+function settleSumDelItem(k,i){
+  if(settleNeedUnlock()) return;
+  const S=settleStore.sumItems; const it=S[k][i]; if(!it) return;
+  if(!confirm('"'+settleSumLabel(it)+'" 칸을 뺄까요?\n넣어 둔 숫자·단가는 남지만 정산에서는 빠집니다.')) return;
+  S[k].splice(i,1); saveSettle(); render();
 }
 function settleResetBtn(){
   return `<button class="st-reset" onclick="settleResetMonth()">🧹 ${esc(settleMonthLabel(settleStore.month))} 기록 초기화 <small>물량 기록·보냄 표시·마감을 지움 · 단가는 유지</small></button>`;
@@ -4421,7 +4934,7 @@ function renderSettlePerson(name){
 }
 
 function settleWorkerCard(n,locked){
-    const items=settleItems();
+    const items=settleItemsFor(settleStore.month);
     const w=settleStore.workers[n]||{prices:{},tax:'3.3'}; const prices=w.prices||{}; const tax=TAX_TYPES[w.tax]?w.tax:'3.3';
     const nA=esc(n); const pinned=!!settleStore.pinned[n]; const ro=locked||pinned;
     return `
@@ -4437,6 +4950,7 @@ function settleWorkerCard(n,locked){
       <div class="st-price-grid">
         ${items.map(it=>`<div><label>${esc(it)} 단가(원)</label><input type="number" inputmode="numeric" class="inp" placeholder="0" ${ro?'disabled':''} value="${prices[it]||''}" onchange="settlePrice('${nA}','${esc(it)}',this.value)"></div>`).join('')}
       </div>
+      ${settleSumOn()?'<p class="st-mxhint">📋 월 합계 칸 단가입니다. 빼는 칸(반품·미배송 등)은 단가 앞에 <b>-</b> 를 붙이면 지급액에서 빠집니다.</p>':''}
     </div>`;
 }
 function settleLockBar(locked){
@@ -4445,7 +4959,7 @@ function settleLockBar(locked){
     : `<div class="st-lock open"><div><b>🔓 잠금 해제됨</b><small>다른 화면으로 가면 자동으로 다시 잠깁니다. 📌 고정된 기사는 그대로 잠겨 있어요.</small></div><button onclick="settleToggleLock()">잠그기</button></div>`;
 }
 function settlePriceListHTML(){
-  const allNames=settleAllNames(); const items=settleItems();
+  const allNames=settleAllNames(); const items=settleItemsFor(settleStore.month);
   let names=allNames.filter(settleMatch);
   const hasPrice=n=>{ const w=settleStore.workers[n]; return !!(w&&w.prices&&items.some(it=>Number(w.prices[it])>0)); };
   if(settleFilter==='noprice') names=names.filter(n=>!hasPrice(n));
@@ -4465,7 +4979,7 @@ function settlePriceListHTML(){
     ${names.length?`<div class="st-tiles">${tiles}</div>`:(allNames.length?'<div class="st-empty">조건에 맞는 이름이 없습니다.</div>':'<div class="st-empty">아직 이름이 없습니다. 아래에서 직접 추가하거나 📦 물량 탭에서 저장하세요.</div>')}`;
 }
 function renderSettlePrices(){
-  const allNames=settleAllNames(); const items=settleItems();
+  const allNames=settleAllNames(); const items=settleItemsFor(settleStore.month);
   const locked=!settleUnlocked;
   const hasPrice=n=>{ const w=settleStore.workers[n]; return !!(w&&w.prices&&items.some(it=>Number(w.prices[it])>0)); };
   const cnt={all:allNames.length, noprice:allNames.filter(n=>!hasPrice(n)).length, pinned:allNames.filter(n=>settleStore.pinned[n]).length};
@@ -4475,6 +4989,7 @@ function renderSettlePrices(){
   const chips=items.map(it=>`<span class="chip">${esc(it)}${locked?'':`<button class="chip-x" onclick="settleDelItem('${esc(it)}')" aria-label="${esc(it)} 빼기">×</button>`}</span>`).join('')
     + (full||locked ? '' : `<span class="chip-add"><input type="text" id="st-item" placeholder="물품 추가" maxlength="10" onkeydown="if(event.key==='Enter')settleAddItem()"><button class="chip-plus" onclick="settleAddItem()" aria-label="물품 추가">＋</button></span>`);
   return `
+    ${settleSumOn()?settleSumItemsHTML(locked):`
     <details class="st-items" ${locked?'':'open'}>
       <summary><span>📦 물품 목록 <b>${items.length}</b>/${SETTLE_MAX_ITEMS}</span><span>${items.map(esc).join(' · ')} ▾</span></summary>
       <div class="st-items-body">
@@ -4483,6 +4998,7 @@ function renderSettlePrices(){
         <p style="font-size:11.5px;color:var(--dim);margin:0 2px 4px;line-height:1.6">${full?'최대 '+SETTLE_MAX_ITEMS+'가지까지입니다. 빼려면 × 를 누르세요.':'이름에 \'딜\'이 들어가면 딜리 정산, 아니면 오네 정산으로 묶입니다. 물량 탭과 같은 목록을 씁니다.'}</p>
       </div>
     </details>
+    `}
     <p style="font-size:12px;color:var(--sub);margin:12px 2px 10px;line-height:1.6">물량을 저장하면 이름이 자동으로 올라옵니다. 이름을 누르면 그 기사의 단가·세금을 넣을 수 있어요.</p>
     ${settleSearchBox('이름 검색')}
     <div class="st-filters">${FILTERS.map(([k,l])=>`<button class="st-filter ${settleFilter===k?'on':''}" onclick="settleSetFilter('${k}')">${l}<b>${cnt[k]}</b></button>`).join('')}</div>
@@ -4770,6 +5286,7 @@ function showFrameFail(f, app){
 }
 
 function render(){
+  rosterHistRecord();
   document.getElementById('hDate').textContent=new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
   const c  = document.getElementById('content');
   const fw = document.getElementById('frames');
